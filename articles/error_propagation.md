@@ -27,7 +27,7 @@ $$
 
 と書き、$X\Delta Y + Y \Delta X$を誤差をみなす、というのが一般的だ。これは、以下のように面積図で説明されることが多い。
 
-![fig](error_propagation/fig1.png)
+![fig](https://raw.githubusercontent.com/kaityo256/zenn-content/main/articles/error_propagation/fig1.png)
 
 自分の誤差($\Delta X$)が、相方($Y$)によって引き延ばされる($Y \Delta X$)ようなイメージだ。
 
