@@ -3,7 +3,7 @@ title: "誤差伝播の乗法の公式の話"
 emoji: "🤖"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["数学","確率","誤差"]
-published: false
+published: true
 ---
 
 ## 概要
