@@ -22,7 +22,7 @@ $$
 と$\Delta X \Delta Y$を高次の項として無視して、最終的に
 
 $$
-(X \pm \Delta X)(Y \pm \Delta Y) \sim XY \pm X\Delta Y + Y \Delta X
+(X \pm \Delta X)(Y \pm \Delta Y) \sim XY \pm (X\Delta Y + Y \Delta X)
 $$
 
 と書き、$X\Delta Y + Y \Delta X$を誤差をみなす、というのが一般的だ。これは、以下のように面積図で説明されることが多い。
