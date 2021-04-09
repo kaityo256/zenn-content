@@ -1,7 +1,7 @@
 {
   "name": "zenn-content",
   "version": "1.0.0",
-  "description": "",
+  "description": "## 概要",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -10,6 +10,14 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "zenn-cli": "^0.1.72"
-  }
+    "zenn-cli": "^0.1.79"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kaityo256/zenn-content.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kaityo256/zenn-content/issues"
+  },
+  "homepage": "https://github.com/kaityo256/zenn-content#readme"
 }
