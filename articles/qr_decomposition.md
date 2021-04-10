@@ -42,7 +42,7 @@ import matplotlib.pyplot as plt
 from PIL import Image, ImageDraw
 ```
 
-では早速QRコードを作ります。
+まずはQRコードを作ります。
 
 ```py
 BOX_SIZE = 10
