@@ -3,7 +3,7 @@ title: "QRコードをQR分解する"
 emoji: "🤖"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["Python","数学"]
-published: false
+published: true
 ---
 
 ## 概要
