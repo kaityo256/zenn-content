@@ -94,4 +94,47 @@ get_image(A)
 
 できてるっぽいですね。
 
-次に、$A$をQR分解します。
+次に、$A$をQR分解します。`linalg.qr`を呼ぶだけです。
+
+```py
+Q, R = linalg.qr(A)
+```
+
+それぞれ可視化してみましょう。
+
+```py
+get_image(Q)
+```
+
+![Q](qr_decomposition/Q.png)
+
+これが直交行列のはずですが、パッと見ではわかりませんね。
+
+```py
+get_image(R)
+```
+
+![R](qr_decomposition/R.png)
+
+こちらは上三角行列だということがわかりやすいですね。
+
+さて、$A=QR$なので、$Q$と$R$をかけたら元に戻るはずです。確認してみましょう。
+
+```py
+get_image(Q @ R)
+```
+
+![QR](qr_decomposition/QR.png)
+
+ちゃんともとに戻りました。
+
+## まとめ
+
+QRコードを行列だと思ってQR分解してみました。本稿がQRコードをQR分解したい人の参考になれば幸いです。
+
+## 関連記事
+
+* [大名行列を特異値分解してみる
+](https://qiita.com/kaityo256/items/78b16c58228e131f8144)
+* [大名行列をTucker分解してみる](https://qiita.com/kaityo256/items/2e3f45377a6b9760f3e0)
+* [大名行列をHOOIでTucker分解してみる](https://qiita.com/kaityo256/items/ab9555ada7b07a65bc12)
