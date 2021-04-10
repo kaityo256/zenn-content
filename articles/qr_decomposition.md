@@ -14,7 +14,7 @@ QRコードをQR分解します。
 
 QRコードを良く目にすると思います。例えばこんなのです。
 
-![QR](qr_decomposition/qrcode.png)
+![QR](https://github.com/kaityo256/zenn-content/blob/main/articles/qr_decomposition/qrcode.png?raw=true)
 
 これを見ると、まるで疎行列のように見えてきますね。なので、これを行列だと思ってQR分解したくなりますね。
 
@@ -90,7 +90,7 @@ def get_image(M):
 get_image(A)
 ```
 
-![A](qr_decomposition/A.png)
+![A](https://github.com/kaityo256/zenn-content/blob/main/articles/qr_decomposition/A.png?raw=true)
 
 できてるっぽいですね。
 
@@ -106,7 +106,7 @@ Q, R = linalg.qr(A)
 get_image(Q)
 ```
 
-![Q](qr_decomposition/Q.png)
+![Q](https://github.com/kaityo256/zenn-content/blob/main/articles/qr_decomposition/Q.png?raw=true)
 
 これが直交行列のはずですが、パッと見ではわかりませんね。
 
@@ -114,7 +114,7 @@ get_image(Q)
 get_image(R)
 ```
 
-![R](qr_decomposition/R.png)
+![R](https://github.com/kaityo256/zenn-content/blob/main/articles/qr_decomposition/R.png?raw=true)
 
 こちらは上三角行列だということがわかりやすいですね。
 
@@ -124,9 +124,9 @@ get_image(R)
 get_image(Q @ R)
 ```
 
-![QR](qr_decomposition/QR.png)
+![QR](https://github.com/kaityo256/zenn-content/blob/main/articles/qr_decomposition/QR.png?raw=true)
 
-ちゃんともとに戻りました。
+ちゃんと元に戻りました。
 
 ## まとめ
 
