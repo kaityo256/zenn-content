@@ -3,7 +3,7 @@ title: "Zenn-CLIを使っててpackage-lock.jsonがコンフリクトした時�
 emoji: "🤖"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: [npm,zenn]
-published: false
+published: true
 ---
 
 ## TL;DR
