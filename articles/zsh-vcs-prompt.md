@@ -24,11 +24,15 @@ GitやSubversionのようなリポジトリを使っていると、そのリポ�
 
 最終的に、`git-prompt`という関数を作り、それが現在のGitリポジトリの状態を表示するようにして、その値を`PROMPT`なり`RPROMPT`なり好きなところに放り込む形とします。
 
+コードは以下に公開しています。様々な状態のリポジトリを作るMakeファイルがあるので、デバッグ目的にも使えるます。
+
+[https://github.com/kaityo256/zsh_vcs](https://github.com/kaityo256/zsh_vcs)
+
 ### 関数を作る
 
 まずは関数を作って実行しましょう。`function`で作れます。以下のファイルを例えば`zshrc_git.zsh`という名前で作ります。
 
-```zsh
+```sh
 function git-prompt{
   echo "main"
 }
@@ -49,7 +53,7 @@ main
 
 リポジトリの状態を色で表現したいので、色をつけてみましょう。そのためには、`colors`というシェル関数を読み込みます。
 
-```zsh
+```sh
 autoload -U colors; colors
 function git-prompt{
   echo "${fg[green]}main${reset_color}"
@@ -93,7 +97,7 @@ fatal: not a git repository (or any of the parent directories): .git
 
 以上をまとめるとこんなスクリプトになります。
 
-```zsh
+```sh
 autoload -U colors; colors
 
 function git-prompt {
@@ -114,7 +118,7 @@ git-prompt
 
 まず、`git status`を実行して、`nothing to commit, working tree clean`と表示されたら緑です。それ以外で、`nothing added to commit but untracked files present (use "git add" to track)`と表示されたら黄色、それ以外は赤ですね。以上を素直に実装するとこんな感じになるでしょう。
 
-```zsh
+```sh
 autoload -U colors; colors
 
 function git-prompt {
@@ -140,7 +144,14 @@ git-prompt
 
 新たに`branch`と`st`という変数を導入しました。`git stutus`の実行結果を`st`に受け、`nothing to`という文字列を含んでいたら緑、`nothing added`を含んでいたら黄色、それ以外は赤です。また、ブランチ名を丸括弧で囲みました。
 
-試してみましょう。リポジトリの`sample_dir`で`make`すると、いくつかディレクトリができます[^1]。
+リポジトリで試してみましょう。`kaityo256/zsh_vcs`リポジトリの中の`sample_dir`で`make`すると、いくつかディレクトリができます[^1]。
+
+```sh
+git clone https://github.com/kaityo256/zsh_vcs.git 
+cd zsh_vcs
+cd sample_dir
+make
+```
 
 それぞれ
 
@@ -178,7 +189,7 @@ source ../../zshrc_git.zsh
 
 以上をまとめると、こんな感じになるでしょう。
 
-```zsh
+```sh
   remote=`git config branch.${branchname}.remote 2> /dev/null`
 
   if [ -z $remote ]; then
@@ -223,7 +234,7 @@ source ../../zshrc_git.zsh
 
 さて、後は出てきた文字列をPROMPTなりRPROMPTなりに突っ込めばよいのですが、そのまま設定すると表示がおかしくなります。これは、色を変えているエスケープシーケンスの文字列を、文字としてカウントしてしまっているためです。これを防ぐには、色を変えるところを`%{`と`%}`で囲む必要があります。以上の修正をしたものが以下です。
 
-```zsh
+```sh
 autoload -U colors; colors
 
 function git-prompt {
