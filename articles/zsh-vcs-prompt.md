@@ -3,7 +3,7 @@ title: "ZshでプロンプトにGitリポジトリの情報を表示する"
 emoji: "🤖"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["zsh", "git"]
-published: false
+published: true
 ---
 
 ## 概要
@@ -111,6 +111,23 @@ function git-prompt {
 
 git-prompt
 ```
+
+ここで、if文の条件式の `[ -z $branchname ]`は、`test`コマンドの略記です。`-z`オプションは、続く文字列の長さが0の時に真となります。こんな感じです。
+
+```sh
+test -z "";echo $?      # => 0
+test -z "hoge";echo $?  # => 1
+```
+
+繰り返しますが`test`は真の時に0を返すので注意が必要です。これで
+
+```sh
+if [ -z $branchname ]; then
+  return
+fi
+```
+
+は、`$branchname`が空文字、つまりGitのリポジトリでなければ真となり、その時は何もせずに`return`しろ、という意味になります。
 
 ### 状態を調べる
 
