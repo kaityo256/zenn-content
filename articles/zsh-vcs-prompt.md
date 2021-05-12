@@ -119,7 +119,7 @@ test -z "";echo $?      # => 0
 test -z "hoge";echo $?  # => 1
 ```
 
-繰り返しますが`test`は真の時に0を返すので注意が必要です。これで
+なお、`test`は真の時に0を返すので注意が必要です。これで
 
 ```sh
 if [ -z $branchname ]; then
