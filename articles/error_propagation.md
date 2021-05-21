@@ -15,7 +15,7 @@ published: true
 $$
 \begin{aligned}
 (X + \Delta X)(Y + \Delta Y)  &= XY + X\Delta Y + Y \Delta X + \Delta X \Delta Y  \\
-&\sim XY + X\Delta Y + Y \Delta X 
+&\sim XY + X\Delta Y + Y \Delta X
 \end{aligned}
 $$
 
@@ -56,8 +56,8 @@ $$
 以後、確率変数を$\hat{X}$のようにハットをつけて表現しよう。確率変数$\hat{X}$に対する期待値を$\left< \hat{X} \right>$とする。期待値は、以下のような線形性を満たす。
 
 $$
-\left< a \hat{X} + b \hat{Y} \right> = 
-a \left<\hat{X}\right> + 
+\left< a \hat{X} + b \hat{Y} \right> =
+a \left<\hat{X}\right> +
 b \left<\hat{Y}\right>
 $$
 
