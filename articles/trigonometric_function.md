@@ -3,7 +3,7 @@ title: "三角関数の話"
 emoji: "🤖"
 type: "idea" # tech: 技術記事 / idea: アイデア
 topics: ["数学","三角関数"]
-published: false
+published: true
 ---
 
 ## はじめに
