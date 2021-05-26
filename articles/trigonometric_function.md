@@ -24,7 +24,7 @@ published: false
 
 いま教育現場で三角関数がどのように教えられているかは知りませんが、おそらく直角三角形を持ってきて、その斜辺と残りの二辺の比からサイン、コサイン、タンジェントを定義するところから入るんだと思います。
 
-![def](trigonometric_function/def.png)
+![def](https://github.com/kaityo256/zenn-content/raw/main/articles/trigonometric_function/def.png)
 
 つまり、三角関数は幾何学の枠組みで導入されます。この後の公式達、例えば加法定理なんかも幾何学的に証明がなされるのではないかと思います。
 
@@ -88,7 +88,7 @@ $$
 
 図示するとこんな感じです
 
-![def](trigonometric_function/rotate_a.png)
+![def](https://github.com/kaityo256/zenn-content/raw/main/articles/trigonometric_function/rotate_a.png)
 
 この行列$A$は、反時計回りに90度回転させる演算だということがわかります。**すなわち、サインやコサインにとって微分とは90度回す処理に他なりません**。
 
