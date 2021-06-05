@@ -56,18 +56,21 @@ def make_fcc_pure(L, rho):
     a = L / m
     ha = a * 0.5
     atoms = []
-    for ix in range(a):
-        for iy in range(a):
-            for iz in range(a):
-                x = ix * a
-                y = iy * a
-                z = iz * a
-                atoms.append((x, y, z))
-                atoms.append((x + ha, y + ha, z))
-                atoms.append((x + ha, y, z + ha))
-                atoms.append((x, y + ha, z + ha))
+    for i in range(m**3):
+        ix = i % m
+        iy = (i // m) % m
+        iz = i // (m * m)
+        x = ix * a
+        y = iy * a
+        z = iz * a
+        atoms.append((x, y, z))
+        atoms.append((x + ha, y + ha, z))
+        atoms.append((x + ha, y, z + ha))
+        atoms.append((x, y + ha, z + ha))
     return atoms
 ```
+
+素直に三重ループ回しても良いですが、あまりインデントが深くなるのもアレなのでシングルループに展開しました。
 
 $L=10$で$\rho=0.5$なら、$m=5$となります。つまり、格子定数は$a=2$です。隣の原子は、そこからx,y,zのどこか二軸で$a/2=1$だけずれているので、隣接粒子までの距離は$\sqrt{2}$です。見てみましょう。
 
@@ -97,5 +100,42 @@ for a in atoms:
 
 さて、欠陥のない面心立方格子では、$L$が小さい時に実現できる密度の粒度が粗すぎました。そこで、ちょっと目標密度より高い密度の欠陥のない面心立方格子を用意しておき、そこから粒子を「間引いて」目標の密度を実現してやることにしましょう。
 
-Pythonであれば、`random.sample`を使えば$N$個から$m$個を重複なしに選ぶことができます。素直に実装
+Pythonであれば、`random.sample`を使えば指定のリストから、指定の数だけ重複無しに取り出したリストを作ることができます。素直に実装するとこんな感じになるでしょう。
+
+```py
+import numpy as np
+import random
+
+
+def get_lattice_number(L, rho):
+    m = np.ceil((L**3 * rho / 4.0)**(1.0 / 3.0))
+    return int(m)
+
+
+def make_fcc_pure(L, rho):
+    m = get_lattice_number(L, rho)
+    a = L / m
+    ha = a * 0.5
+    atoms = []
+    for i in range(m**3):
+        ix = i % m
+        iy = (i // m) % m
+        iz = i // (m * m)
+        x = ix * a
+        y = iy * a
+        z = iz * a
+        atoms.append((x, y, z))
+        atoms.append((x + ha, y + ha, z))
+        atoms.append((x + ha, y, z + ha))
+        atoms.append((x, y + ha, z + ha))
+    return atoms
+
+
+def make_fcc_defect(L, rho):
+    atoms = make_fcc_pure(L, rho)
+    n = int(rho * L**3)
+    return random.sample(atoms, n)
+```
+
+先ほどと違って、かならず指定密度「以上」の欠陥無し格子を作るために、`get_lattice_number`で天井関数を使っています。後は、欠陥無しのFCCの原子リストを作ってから、`random.sample(atoms, n)`で欲しい数だけ抜き出すだけです。
 

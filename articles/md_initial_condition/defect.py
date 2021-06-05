@@ -1,14 +1,10 @@
 import numpy as np
+import random
 
 
 def get_lattice_number(L, rho):
-    m = np.floor((L**3 * rho / 4.0)**(1.0 / 3.0))
-    drho1 = np.abs(4.0 * m**3 / L**3 - rho)
-    drho2 = np.abs(4.0 * (m + 1)**3 / L**3 - rho)
-    if drho1 < drho2:
-        return int(m)
-    else:
-        return int(m + 1)
+    m = np.ceil((L**3 * rho / 4.0)**(1.0 / 3.0))
+    return int(m)
 
 
 def make_fcc_pure(L, rho):
@@ -30,15 +26,12 @@ def make_fcc_pure(L, rho):
     return atoms
 
 
-def plot_pure():
-    L = 10
-    for i in range(70):
-        rho = 0.2 + 0.01 * i
-        m = get_lattice_number(L, rho)
-        rho_a = 4.0 * m**3 / L**3
-        print(f"{rho} {rho_a} {m}")
+def make_fcc_defect(L, rho):
+    atoms = make_fcc_pure(L, rho)
+    n = int(rho * L**3)
+    return random.sample(atoms, n)
 
 
-atoms = make_fcc_pure(10.0, 0.5)
+atoms = make_fcc_defect(10.0, 0.489)
 for a in atoms:
     print(f"{a[0]} {a[1]} {a[2]}")
