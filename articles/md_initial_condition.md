@@ -3,7 +3,7 @@ title: "分子動力学法でなるべく精密に指定の密度の初期条件
 emoji: "🤖"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["Python","MD"]
-published: false
+published: true
 ---
 
 ## 概要
@@ -46,7 +46,7 @@ def get_lattice_number(L, rho):
 
 この方法だと、$L$が小さい時に目標密度$\rho$と実現密度$\rho_a$の差が大きくなります。例えば$L=10$の時、$m$が整数という条件なので、例えば$m=4$の時に$\rho_a=0.256$、$m=5$の時に$\rho_a=0.5$、$m=6$の時に$\rho_a=0.864$と、その刻み幅が大きすぎます。目標密度$\rho$と実現密度$\rho_a$をプロットするとこんな感じです。
 
-![fig](md_initial_condition/pure.png)
+![fig](https://github.com/kaityo256/zenn-content/raw/main/articles/md_initial_condition/pure.png)
 
 これをなんとかしましょう、というのが本稿の主題ですが、それはそれとして指定の格子数、格子定数でFCCに組むコードを作っておきましょう。格子定数$a=L/m$の立方体上に原子をおき、そこから$xy$、$yz$、$zx$面に、$a/2$だけずれた「面心」に原子を3つ置けば良いので、こんな感じになるでしょう。
 
@@ -158,11 +158,11 @@ $python3 defect.py | wc
 
 まず、欠陥無しの場合($\rho=0.5$)。
 
-![fig](md_initial_condition/atoms_pure.png)
+![fig](https://github.com/kaityo256/zenn-content/raw/main/articles/md_initial_condition/atoms_pure.png)
 
 欠陥ありの場合($\rho=0.489$)。
 
-![fig](md_initial_condition/atoms_defect.png)
+![fig](https://github.com/kaityo256/zenn-content/raw/main/articles/md_initial_condition/atoms_defect.png)
 
 よく見ると、いくつか原子が欠けているのがわかると思います。実際には、欠陥無しの場合に比べて原子が11個欠けており、中途半端な密度$\rho=0.489$を実現してます。
 
