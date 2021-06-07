@@ -2,7 +2,7 @@
 title: "分子動力学法でなるべく精密に指定の密度の初期条件を作る方法"
 emoji: "🤖"
 type: "tech" # tech: 技術記事 / idea: アイデア
-topics: ["Python","MD"]
+topics: ["Python","分子動力学法"]
 published: true
 ---
 
