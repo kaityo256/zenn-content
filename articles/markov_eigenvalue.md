@@ -1,9 +1,9 @@
 ---
-title: "確率と行列の固有値の話"
+title: "線形代数と確率過程の話"
 emoji: "🤖"
 type: "idea" # tech: 技術記事 / idea: アイデア
 topics: ["python","数学"]
-published: false
+published: true
 ---
 
 ## はじめに
@@ -18,7 +18,7 @@ published: false
 
 簡単なゲームを考えます。0から4までの数字がついたマスが並んでおり、2からスタートです。コインを投げ、表なら一つ上の数字へ、裏なら一つ下の数字へ移動し、4のマスに到達したら「勝ち」で賞金1万円がもらえますが、0のマスに到達してしまうと「負け」で1万円を払わなければいけません。コインには不正が無いものとしましょう。このゲームの獲得賞金の期待値は0であることはなんとなくわかると思います。
 
-![game](markov_eigenvalue/game.png)
+![game](https://github.com/kaityo256/zenn-content/raw/main/articles/markov_eigenvalue/game.png)
 
 さて、このギャンブルの胴元から、「5千円払えば、3のマスからスタートさせてあげます」と言われたとしましょう。この提案に乗るべきでしょうか？それともこれは損な取引でしょうか？
 
@@ -80,7 +80,7 @@ $$
 p_2(t+1) = \frac{1}{2}p_1(t)+\frac{1}{2}p_3(t)
 $$
 
-![step](markov_eigenvalue/step.png)
+![step](https://github.com/kaityo256/zenn-content/raw/main/articles/markov_eigenvalue/game.png)
 
 さて、時刻$t+1$に1のマスにいるためには、時刻$t$に2のマスにいる必要があります。0のマスは「負け」なので、一度そこにいったらずっと負けのままです。
 
