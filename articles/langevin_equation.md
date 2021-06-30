@@ -3,7 +3,7 @@ title: "Langevin方程式と確率微分方程式"
 emoji: "🤖"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["数学","確率過程","分子動力学法","python"]
-published: false
+published: true
 ---
 
 ## はじめに
