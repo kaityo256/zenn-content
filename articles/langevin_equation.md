@@ -23,7 +23,13 @@ $$
 \end{aligned}
 $$
 
-を満たすような確率変数です。この方程式は、水の中の粒子の運動を表しており、$-\gamma v$が水の抵抗による散逸を、$\sqrt{2D} \hat{R}$の項が水分子の衝突による揺動を表現しています。
+を満たすような確率変数です。この方程式は、水の中の粒子の運動を表しており、$-\gamma v$が水の抵抗による散逸を、$\sqrt{2D} \hat{R}$の項が水分子の衝突による揺動を表現しています。定常分布は以下のガウス分布になります。
+
+$$
+f(v) = \frac{\exp{(-\beta v^2/2)}}{\sqrt{2 \pi/\beta}}
+$$
+
+ただし、$\beta = \gamma/D$です。
 
 さて、微分方程式を解くとは、微分している変数について積分し、原始関数を求めることです。しかし、この方程式には$\hat{R}$という確率変数が含まれています。このように確率変数を含む微分方程式を確率微分方程式と呼びます。Langevin方程式は確率微分方程式の一種です。こいつを積分する、ということはどういうことか真面目に考えてみましょう、というのが本稿の目的です。
 
@@ -37,7 +43,7 @@ $$
 
 です。この意味は、関数$f(x)$の、区間$x_s < x < x_e$における面積です。とりあえず区間を$N$等分して、$f(x)$の面積を短冊の和として近似してみましょう。
 
-![langevin_equation/riemann.png](langevin_equation/riemann.png)
+![langevin_equation/riemann.png](https://github.com/kaityo256/zenn-content/raw/main/articles/langevin_equation/riemann.png)
 
 つまり、
 
@@ -69,7 +75,7 @@ $$
 \end{aligned}
 $$
 
-![refpoint](langevin_equation/refpoint.png)
+![refpoint](https://github.com/kaityo256/zenn-content/raw/main/articles/langevin_equation/refpoint.png)
 
 さて、確率微分方程式を積分するためには、なんか確率変数を積分する必要があります。例えば
 
@@ -77,7 +83,7 @@ $$
 \dot{x} = \hat{R}
 $$
 
-と、初期条件$x(t=0)$から、任意の時刻における$x(t)$の値を求めるためには、
+という微分方程式において、初期条件$x(t=0)$から、任意の時刻における$x(t)$の値を求めるためには、
 
 $$
 x(t) = x(0) + \int_0^t \hat{R}(t) dt
@@ -107,7 +113,7 @@ $$
 
 となります。この右辺はよくわからないので、左辺を考えてみましょう。連続時間・空間だから難しいので、まずは離散時間、離散空間を考えます。毎回コインを投げ、表なら右に、裏なら左に一歩進むランダムウォークを考えます。後で連続極限を取るために、一歩の長さを$h$としておきましょう。裏と表が出る確率はいずれも1/2であるとします。
 
-![fig](langevin_equation/limit.png)
+![fig](https://github.com/kaityo256/zenn-content/raw/main/articles/langevin_equation/limit.png)
 
 $k$ステップ目の場所を$x_k$とすると、
 
@@ -221,7 +227,58 @@ $$
 v(t+h) = v(t) + -\gamma v(t) h  + \sqrt{2D} w
 $$
 
-ただし、$w$は平均$0$、分散$t$に従う確率変数です。Pythonなら`numpy.random.normal(0, t**0.5)`で得ることができます。この積分スキームをEuler-Maruyama法と呼びます。
+ただし、$w$は平均$0$、分散$t$に従う確率変数です。Pythonなら`numpy.random.normal(0, t**0.5)`で得ることができます。この積分スキームをEuler-Maruyama法と呼びます。ちょっと試してみましょう。$\gamma=D=1$としています。
+
+```py
+import numpy as np
+from matplotlib import pyplot as plt
+from numba import jit
+
+@jit
+def additive_euler_maruyama(N):
+  v = 0
+  data = []
+  for _ in range(N):
+    v += - v * h + np.random.normal(0,np.sqrt(2.0*h))
+    data.append(x)
+  return data
+```
+
+`additive_euler_maruyama`は、先程の式をそのまま実装したものです。これで`data`に時系列が帰ってくるので、その定常分布を調べてみましょう。
+
+時系列から分布関数を作る関数`dist`はこんな感じになります。ソートして累積分布関数を求め、それを微分することで分布関数を求めています(参考：[累積分布関数をソートで求める](https://qiita.com/kaityo256/items/690a463b6b865da80de6))。
+
+```py
+def dist(data):
+  d = sorted(data)
+  d = [np.average(d[i*AVE:(i+1)*AVE]) for i in range(NA)]
+  t = np.array([i/N for i in range(N)])
+  t = [np.average(t[i*AVE:(i+1)*AVE]) for i in range(NA)]
+  d = np.array(d)
+  t = np.array(t)
+  x = []
+  y = []
+  for i in range(NA-1):
+    v = (t[i+1] - t[i])/(d[i+1]-d[i])
+    x.append((d[i+1]+d[i])*0.5)
+    y.append(v)
+  return np.array(x),np.array(y)
+```
+
+プロットしてみましょう。
+
+```py
+d1, f1 = dist(additive_euler_maruyama(N))
+fig, ax = plt.subplots()
+theory = np.exp(-d1**2/2)/np.sqrt(3.14*2)
+ax.plot(d1,f1)
+ax.plot(d1,theory)
+fig.show()
+```
+
+![additive](https://github.com/kaityo256/zenn-content/raw/main/articles/langevin_equation/additive.png)
+
+ちゃんとガウス分布になっていますね。
 
 ## Ito積分とStratonovich積分
 
@@ -273,7 +330,7 @@ $$
 
 この極限として定義される積分をStratonovich積分といいます。さて、通常のRiemann積分では、「短冊」の高さをどこにとっても結果は同じでした。しかし、確率過程においては「短冊」の高さをどこにとるかによって極限の行き先が異なってしまいます。すなわち、伊藤積分とStratonovich積分は異なる公式を与えます。これは、確率微分方程式を、どう解釈するか、という問題となります。数値解法も解釈に依存し、もちろんその結果も解釈に依存します。
 
-![fig](langevin_equation/representation.png)
+![fig](https://github.com/kaityo256/zenn-content/raw/main/articles/langevin_equation/representation.png)
 
 以下の乗法過程を考えてみます。
 
@@ -345,26 +402,7 @@ def multiplicative_two_step(N):
   return data
 ```
 
-時系列から分布関数を作る関数`dist`はこんな感じになります。ソートして累積分布関数を求め、それを微分することで分布関数を求めています(参考：[累積分布関数をソートで求める](https://qiita.com/kaityo256/items/690a463b6b865da80de6))。
-
-```py
-def dist(data):
-  d = sorted(data)
-  d = [np.average(d[i*AVE:(i+1)*AVE]) for i in range(NA)]
-  t = np.array([i/N for i in range(N)])
-  t = [np.average(t[i*AVE:(i+1)*AVE]) for i in range(NA)]
-  d = np.array(d)
-  t = np.array(t)
-  x = []
-  y = []
-  for i in range(NA-1):
-    v = (t[i+1] - t[i])/(d[i+1]-d[i])
-    x.append((d[i+1]+d[i])*0.5)
-    y.append(v)
-  return np.array(x),np.array(y)
-```
-
-これを使って、伊藤解釈とStratonovich解釈の分布関数をプロットしてみましょう。
+伊藤解釈とStratonovich解釈の分布関数をプロットしてみましょう。
 
 ```py
 d1, f1 = dist(multiplicative_euler_maruyama(N))
@@ -374,7 +412,7 @@ ax.plot(d1,f1)
 ax.plot(d2,f2)
 ```
 
-![plot](langevin_equation/plot.png)
+![plot](https://github.com/kaityo256/zenn-content/raw/main/articles/langevin_equation/plot.png)
 
 明らかにずれています。
 
@@ -405,7 +443,7 @@ ax.plot(d1,stratonovich,color='red',label='Stratonovich')
 ax.legend()
 ```
 
-![plot](langevin_equation/theory.png)
+![plot](https://github.com/kaityo256/zenn-content/raw/main/articles/langevin_equation/theory.png)
 
 それぞれ理論曲線と一致しています。
 
