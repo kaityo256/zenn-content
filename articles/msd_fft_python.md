@@ -255,3 +255,134 @@ ax.legend()
 ![fig](msd_fft_python/msd_simple_np.png)
 
 完全に一致していますね。
+
+### フーリエ変換
+
+さて、フーリエ変換のお時間です。何かを高速に計算しようとすると、やたらと顔を出す高速フーリエ変換(Fast Fourier Transform, FFT)ですが、ここにも顔を出してきます。まずは平均二乗変位の定義をバラします。
+
+$$
+\begin{aligned}
+D(m) &= \frac{1}{N-m} \sum_{k=0}^{N-m-1}
+\left(x_{k+m} - x_k\right)^2 \\
+&= \underbrace{\frac{1}{N-m} \sum_{k=0}^{N-m-1} \left(x_{k+m}^2 + x_k^2\right)}_{s_1}
+- 2 \times \underbrace{\frac{1}{N-m} \sum_{k=0}^{N-m-1} x_{k+m} x_k}_{s_2}\\
+&= s_1 -2 s_2
+\end{aligned}
+$$
+
+まず、$s_1$の項は、要するに時系列の2乗の平均の2倍です。なので、
+
+```py
+s1 = np.average(x**2)*2
+```
+
+と計算できます。$s_2$は自己相関関数です。ウィーナー・ヒンチンの定理により、自己相関関数はパワースペクトルとフーリエ変換の関係にあるのでした。なので、まずは`x`をフーリエ変換し、その絶対値の二乗を計算してから逆フーリエ変換してやると自己相関関数が求まります。以上を実装してやるとこうなります。
+
+```py
+def calc_msd_fft(x):
+    n=len(x)
+    fk = np.fft.fft(x, n=2*n)  #2*N because of zero-padding
+    power = fk * fk.conjugate()
+    res = np.fft.ifft(power)[:n].real
+    s2 = res/(n*np.ones(n)-np.arange(0,n))
+    s1 = np.average(x**2)
+    msd = 2*s1 - 2*s2
+    return msd[:n//4]
+```
+
+実行しましょう。
+
+```py
+%%time
+msd_fft = calc_msd_fft(x)
+plt.plot(msd_fft)
+```
+
+![fig](msd_fft_python/msd_simple_np.png)
+
+```txt
+CPU times: user 17.7 ms, sys: 989 µs, total: 18.7 ms
+Wall time: 20.5 ms
+```
+
+20.5 msとなりました。早いですね。
+
+念のため、ナイーブな方法で得られたものと重ねてみましょう。
+
+```py
+fig, ax = plt.subplots()
+msd_np = calc_msd_np(x)
+msd_fft = calc_msd_fft(x)
+ax.plot(msd_np,label="NumPy")
+ax.plot(msd_fft,label="FFT")
+ax.legend()
+plt.show()
+```
+
+![fig](msd_fft_python/msd_np_fft.png)
+
+ちょっとずれてしまいました。これは、$s_1$の計算を真面目にやらなかったためです。本当は
+
+$$
+s_1 = \frac{1}{N-m} \sum_{k=0}^{N-m-1} \left(x_{k+m}^2 + x_k^2\right)
+$$
+
+でしたが、これを、
+
+$$
+s_1 \sim \frac{2}{N} \sum_{k=0}^{N} x_k^2
+$$
+
+と近似しました。これはわりと良い近似なので別にこのままでも良い気がしますが、気になるならちゃんと計算しましょう。先ほど触れた「ちょっとずらした和」を使えば簡単です。ただし、差が0のところだけは別扱いにする必要があります。
+
+```py
+s1 = np.zeros(n)
+s1[0] = np.average(x2)*2.0
+for m in range(1,n):
+    s1[m] = np.average(x2[m:] + x2[:-m])
+```
+
+これを使うとこうなるでしょう。
+
+```py
+def calc_msd_fft2(x):
+    n=len(x)
+    fk = np.fft.fft(x, n=2*n)  #2*N because of zero-padding
+    power = fk * fk.conjugate()
+    res = np.fft.ifft(power)[:n].real
+    s2 = res/(n*np.ones(n)-np.arange(0,n))
+    s1=np.zeros(n)
+    x2 = x**2
+    s1 = np.zeros(n)
+    s1[0] = np.average(x2)*2.0
+    for m in range(1,n):
+        s1[m] = np.average(x2[m:] + x2[:-m])
+    msd = s1 - 2*s2
+    return msd[:n//4]
+```
+
+重ねてみましょう。
+
+```py
+fig, ax = plt.subplots()
+msd_np = calc_msd_np(x)
+msd_fft2 = calc_msd_fft2(x)
+ax.plot(msd_fft2,label="FFT2")
+ax.plot(msd_np,label="NumPy")
+ax.legend()
+plt.show()
+```
+
+![fig](msd_fft_python/msd_np_fft2.png)
+
+ぴったり一致しました。
+
+## まとめ
+
+平均二乗変位をフーリエ変換を使って計算するサンプルを紹介しました。実際に分子動力学計算などで得られた結果を解析するには、周期境界条件補正が必要となります。補正してしまえば、あとは普通にフーリエ変換するだけです。なんとなく「自己相関関数はフーリエ変換で求められるんだったな」「平均二乗変位もフーリエ変換で求められるんだったな」と覚えていても、実際に書こうとすると「あれ？」となるものです。っていうかなりました。
+
+この記事が誰かの役に立てば幸いです。
+
+## 参考
+
+* [Stack Overflow: Computing mean square displacement using python and FFT](https://stackoverflow.com/questions/34222272/computing-mean-square-displacement-using-python-and-fft)
