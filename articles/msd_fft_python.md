@@ -2,7 +2,7 @@
 title: "平均二乗変位をフーリエ変換で求める"
 emoji: "🤖"
 type: "tech" # tech: 技術記事 / idea: アイデア
-topics: ["Python"]
+topics: ["Python","数学","フーリエ変換","離散フーリエ変換"]
 published: false
 ---
 
@@ -29,6 +29,10 @@ $$
 
 で定義されます。これはナイーブに計算すると$O(N^2)$となりますが、フーリエ変換を使うと$O(N\ln N)$になって、特に$N$が大きい時に高速になります。それを見てましょう、というのが本稿の趣旨です。
 
+以下のコードはGitHubに公開してあり、Google Colabで直接開くことができます。
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/kaityo256/zenn-content/blob/main/articles/msd_fft_python/msd_fft_python.ipynb)
+
 ## 周期境界補正
 
 平均二乗変位を求める前に、周期境界補正について考えます。多くの場合、シミュレーションでは周期境界を用いて計算を行います。すると、注目する粒子が境界を跨ぐ時に、それをちゃんと考慮してやらないと変位がおかしなことになります。まずは周期境界下で座標の時系列`x`が与えられた時に、周期境界条件の補正をしてやることを考えましょう。
@@ -51,7 +55,7 @@ plt.plot(x)
 plt.show()
 ```
 
-![fig](msd_fft_python/x1.png)
+![fig](https://github.com/kaityo256/zenn-content/raw/main/articles/msd_fft_python/x1.png)
 
 これが、あたかも周期境界がなく、無限の領域を運動していたらどんな軌跡だったかを考えるのが周期境界条件補正です。単純にはこんなことをしてやりたくなります。
 
@@ -73,7 +77,7 @@ plt.plot(x)
 plt.show()
 ```
 
-![fig](msd_fft_python/x1_wrong.png)
+![fig](https://github.com/kaityo256/zenn-content/raw/main/articles/msd_fft_python/x1_wrong.png)
 
 このように、二回境界をまたぐケースでおかしくなります。
 
@@ -97,7 +101,7 @@ plt.plot(x)
 plt.show()
 ```
 
-![fig](msd_fft_python/x1_correct.png)
+![fig](https://github.com/kaityo256/zenn-content/raw/main/articles/msd_fft_python/x1_correct.png)
 
 ちゃんとまっすぐになりましたね。
 
@@ -112,8 +116,8 @@ plt.plot(x)
 plt.show()
 ```
 
-![fig](msd_fft_python/x2.png)
-![fig](msd_fft_python/x2_correct.png)
+![fig](https://github.com/kaityo256/zenn-content/raw/main/articles/msd_fft_python/x2.png)
+![fig](https://github.com/kaityo256/zenn-content/raw/main/articles/msd_fft_python/x2_correct.png)
 
 大丈夫そうです。
 
@@ -146,7 +150,7 @@ plt.plot(x)
 plt.show()
 ```
 
-![fig](msd_fft_python/random_walk.png)
+![fig](https://github.com/kaityo256/zenn-content/raw/main/articles/msd_fft_python/random_walk.png)
 
 周期境界によりよくわからなくなっています。補正してやりましょう。
 
@@ -156,7 +160,7 @@ plt.plot(x)
 plt.show()
 ```
 
-![fig](msd_fft_python/random_walk_correct.png)
+![fig](https://github.com/kaityo256/zenn-content/raw/main/articles/msd_fft_python/random_walk_correct.png)
 
 それっぽくなりました。以後、この軌跡について平均二乗変位を計算します。
 
@@ -195,7 +199,7 @@ plt.plot(msd_simple)
 plt.show()
 ```
 
-![fig](msd_fft_python/msd_simple.png)
+![fig](https://github.com/kaityo256/zenn-content/raw/main/articles/msd_fft_python/msd_simple.png)
 
 ```txt
 CPU times: user 3.32 s, sys: 16.7 ms, total: 3.34 s
@@ -235,7 +239,7 @@ plt.plot(msd_np)
 plt.show()
 ```
 
-![fig](msd_fft_python/msd_np.png)
+![fig](https://github.com/kaityo256/zenn-content/raw/main/articles/msd_fft_python/msd_np.png)
 
 ```txt
 CPU times: user 151 ms, sys: 0 ns, total: 151 ms
@@ -252,7 +256,7 @@ ax.plot(msd_simple,label="Simple")
 ax.plot(msd_np,label="NumPy")
 ax.legend()
 ```
-![fig](msd_fft_python/msd_simple_np.png)
+![fig](https://github.com/kaityo256/zenn-content/raw/main/articles/msd_fft_python/msd_simple_np.png)
 
 完全に一致していますね。
 
@@ -298,7 +302,7 @@ msd_fft = calc_msd_fft(x)
 plt.plot(msd_fft)
 ```
 
-![fig](msd_fft_python/msd_simple_np.png)
+![fig](https://github.com/kaityo256/zenn-content/raw/main/articles/msd_fft_python/msd_simple_np.png)
 
 ```txt
 CPU times: user 17.7 ms, sys: 989 µs, total: 18.7 ms
@@ -319,7 +323,7 @@ ax.legend()
 plt.show()
 ```
 
-![fig](msd_fft_python/msd_np_fft.png)
+![fig](https://github.com/kaityo256/zenn-content/raw/main/articles/msd_fft_python/msd_np_fft.png)
 
 ちょっとずれてしまいました。これは、$s_1$の計算を真面目にやらなかったためです。本当は
 
@@ -373,7 +377,7 @@ ax.legend()
 plt.show()
 ```
 
-![fig](msd_fft_python/msd_np_fft2.png)
+![fig](https://github.com/kaityo256/zenn-content/raw/main/articles/msd_fft_python/msd_np_fft2.png)
 
 ぴったり一致しました。
 
