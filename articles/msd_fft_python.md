@@ -17,7 +17,7 @@ $$
 ただし、$\hat{R}$は白色雑音です。この時、時刻$t$と時刻$t+\tau$の座標の差の二乗の平均は、その時間$\tau$に比例します。
 
 $$
-\left< \left(x(t) - x(t+\tau) \right)^2 \right> \propto Dt
+\left< \left(x(t) - x(t+\tau) \right)^2 \right> \propto D\tau
 $$
 
 この$\left< \left(x(t) - x(t+\tau) \right)^2 \right>$を、平均二乗変位(Mean Square Displacement, MSD)と呼びます。いま、時間間隔$h$で座標を観測し、$x_k = x(hk)$と書きましょう。この離散的な時系列$\{x_k\}$が$N$点得られた時(つまり$k=0,1,\cdots,N-1$)、平均二乗変位$D(m)$は
@@ -285,7 +285,7 @@ s1 = np.average(x**2)*2
 ```py
 def calc_msd_fft(x):
     n=len(x)
-    fk = np.fft.fft(x, n=2*n)  #2*N because of zero-padding
+    fk = np.fft.fft(x, n=2*n)
     power = fk * fk.conjugate()
     res = np.fft.ifft(power)[:n].real
     s2 = res/(n*np.ones(n)-np.arange(0,n))
@@ -351,11 +351,10 @@ for m in range(1,n):
 ```py
 def calc_msd_fft2(x):
     n=len(x)
-    fk = np.fft.fft(x, n=2*n)  #2*N because of zero-padding
+    fk = np.fft.fft(x, n=2*n)
     power = fk * fk.conjugate()
     res = np.fft.ifft(power)[:n].real
     s2 = res/(n*np.ones(n)-np.arange(0,n))
-    s1=np.zeros(n)
     x2 = x**2
     s1 = np.zeros(n)
     s1[0] = np.average(x2)*2.0
