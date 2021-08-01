@@ -3,7 +3,7 @@ title: "リンカのお仕事"
 emoji: "🤖"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["C","C++"]
-published: false
+published: true
 ---
 
 ## はじめに
