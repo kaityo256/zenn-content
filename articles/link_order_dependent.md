@@ -3,7 +3,7 @@ title: "実行結果がリンクの順番に依存するコード"
 emoji: "🤖"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["cpp"]
-published: false
+published: true
 ---
 
 ## はじめに
