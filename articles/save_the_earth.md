@@ -3,7 +3,7 @@ title: "技術記事を書く人を大事にしよう"
 emoji: "🤖"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["ポエム"]
-published: false
+published: true
 ---
 
 ## TL;DR
