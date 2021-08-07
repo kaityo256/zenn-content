@@ -108,7 +108,17 @@ get_image(Q)
 
 ![Q](https://github.com/kaityo256/zenn-content/blob/main/articles/qr_decomposition/Q.png?raw=true)
 
-これが直交行列のはずですが、パッと見ではわかりませんね。
+これは直交行列のはず。パッと見ではわかりませんが、直交行列は、自身の転置と行列積を取ると対角行列になるという性質があります。確認してみましょう。
+
+```py
+get_image(Q @ Q.transpose())
+```
+
+![Q](https://github.com/kaityo256/zenn-content/blob/main/articles/qr_decomposition/Q_diag.png?raw=true)
+
+ちゃんと対角行列になっていますね。
+
+次は`R`を見てみましょう。
 
 ```py
 get_image(R)
