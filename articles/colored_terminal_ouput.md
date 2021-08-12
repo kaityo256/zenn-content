@@ -44,8 +44,6 @@ icdiff jugemu1.txt jugemu2.txt
 
 ![icdiff](colored_terminal_ouput/icdiff.png)
 
-単にリダイレクトすると、エスケープシーケンス付きの出力となり、
-
 これを最終的にPDFで保存したいよね、という話。
 
 ## 案1: そのまま送る
@@ -65,6 +63,8 @@ icdiff jugemu1.txt jugemu2.txt > diff.txt
 ```sh
 less -R diff.txt
 ```
+
+![less -R](colored_terminal_ouput/less_win.png)
 
 これで先程得られた通りの出力が得られる。もしくは、単に`cat`で画面に表示してしまっても、エスケープシーケンスを処理してくれる。簡易用途にはこれでも良い気がする。
 
@@ -120,14 +120,26 @@ icdiff jugemu1.txt jugemu2.txt | aha --black > diff.html
 
 というわけで、素直にブラウザで開いて、印刷からPDFに出力を選んでしまうのが楽だと思われる。
 
-例えばChromeならこんな感じになる。ちょっとずれてしまってますね。
+しかし、MacのChromeだとちょっとずれてしまう。
 
 ![PDF](colored_terminal_ouput/print_pdf.png)
 
-そのままだと背景が白くなってしまうため、「背景のグラフィック」にチェックを入れておくと良い。
+ちなみにそのままだと背景が白くなってしまうため、「背景のグラフィック」にチェックを入れておくと良い。
 
 保存したPDFはこんな感じ。
 
 ![pdf](colored_terminal_ouput/diff.png)
 
-ずれたまま。
+ずれたままだ。
+
+なお、WindowsのChromeで同じことをするとこうなる。
+
+![pdf](colored_terminal_ouput/diff_win.png)
+
+それほどずれはひどくない。
+
+## まとめ
+
+日本語を含む色付きターミナル出力を保存するには、MacではWordに貼り付けるのが、Windowsでは`aha`でHTMLにしてからブラウザでPDFに保存するのが良いと思われる。HTMLで保存するとちょっとずれてしまうが、頑張りたい人はHTMLのフォントをいじったりすれば良いのではないでしょうか。
+
+しかし日本語がからむといろいろ面倒ですね。
