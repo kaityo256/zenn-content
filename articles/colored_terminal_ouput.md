@@ -2,7 +2,7 @@
 title: "色付きdiffをPDFで保存する"
 emoji: "🤖"
 type: "tech" # tech: 技術記事 / idea: アイデア
-topics: ["diff"]
+topics: ["diff","aha","PDF"]
 published: false
 ---
 
