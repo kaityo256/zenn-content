@@ -42,7 +42,7 @@ icdiff jugemu1.txt jugemu2.txt
 
 すると、こんな出力を得る。
 
-![icdiff](colored_terminal_output/icdiff.png)
+![icdiff](https://github.com/kaityo256/zenn-content/raw/main/articles/colored_terminal_output/icdiff.png)
 
 これを最終的にPDFで保存したいよね、という話。
 
@@ -56,7 +56,7 @@ icdiff jugemu1.txt jugemu2.txt > diff.txt
 
 普通に`less`で見るとこうなってしまう。
 
-![less](colored_terminal_output/less.png)
+![less](https://github.com/kaityo256/zenn-content/raw/main/articles/colored_terminal_output/less.png)
 
 しかし、`-R`をつけてやれば読める。
 
@@ -64,7 +64,7 @@ icdiff jugemu1.txt jugemu2.txt > diff.txt
 less -R diff.txt
 ```
 
-![less -R](colored_terminal_output/less_win.png)
+![less -R](https://github.com/kaityo256/zenn-content/raw/main/articles/colored_terminal_output/less_win.png)
 
 これで先程得られた通りの出力が得られる。もしくは、単に`cat`で画面に表示してしまっても、エスケープシーケンスを処理してくれる。簡易用途にはこれでも良い気がする。
 
@@ -72,7 +72,7 @@ less -R diff.txt
 
 使っているターミナルが、色付き出力をリッチテキストとしてコピーしてくれるなら、そのままWordに貼り付けらる。例えばMacのターミナルならそのままWordに色付きでコピペできる。端末の背景色とWordの背景色が異なると見づらいので、Wordの「デザイン」「ページの色」から、端末の背景色(例えば黒)を選ぶと良い。こんな感じになる。
 
-![less](colored_terminal_output/word.png)
+![less](https://github.com/kaityo256/zenn-content/raw/main/articles/colored_terminal_output/word.png)
 
 あとはWordでPDFにエクスポートしてやれば良い。
 
@@ -122,19 +122,19 @@ icdiff jugemu1.txt jugemu2.txt | aha --black > diff.html
 
 しかし、MacのChromeだとちょっとずれてしまう。
 
-![PDF](colored_terminal_output/print_pdf.png)
+![PDF](https://github.com/kaityo256/zenn-content/raw/main/articles/colored_terminal_output/print_pdf.png)
 
 ちなみにそのままだと背景が白くなってしまうため、「背景のグラフィック」にチェックを入れておくと良い。
 
 保存したPDFはこんな感じ。
 
-![pdf](colored_terminal_output/diff.png)
+![pdf](https://github.com/kaityo256/zenn-content/raw/main/articles/colored_terminal_output/diff.png)
 
 ずれたままだ。
 
 なお、WindowsのChromeで同じことをするとこうなる。
 
-![pdf](colored_terminal_output/diff_win.png)
+![pdf](https://github.com/kaityo256/zenn-content/raw/main/articles/colored_terminal_output/diff_win.png)
 
 それほどずれはひどくない。
 
