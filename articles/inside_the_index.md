@@ -143,7 +143,7 @@ $ git commit -m "Initial commit"
 
 無事にコミットされ、`fc4050c`というコミットオブジェクトが作られました。
 
-![index](inside_the_index/index.png)
+![index](https://github.com/kaityo256/zenn-content/raw/main/articles/inside_the_index/index.png)
 
 `.git`がどうなっているか見てみましょう。
 
@@ -317,7 +317,7 @@ $ git ls-files --stage
 100644 363d8b784900d74b3159e8e93a651c0db42629ef 0    test.txt
 ```
 
-![index](inside_the_index/switch.png)
+![index](https://github.com/kaityo256/zenn-content/raw/main/articles/inside_the_index/switch.png)
 
 つまり、ブランチ切り替えの際、ワーキングツリーだけでなく、インデックスも切り替えられています。
 
