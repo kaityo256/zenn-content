@@ -449,3 +449,8 @@ git ls-files --stage | awk '{print $2}' |xargs -I arg git cat-file -t arg | sort
 * ブランチを切り替えると、ワーキングツリーが切り替わるが、対応してインデックスの中身も切り替わる
 
 ちなみに`.git/index`のファイルフォーマットは[こちら](https://github.com/git/git/blob/master/Documentation/technical/index-format.txt)。気になる人は解析してみると面白いかも。
+
+## 参考文献
+
+* [Pro Git - 10.1 Git Internals](https://git-scm.com/book/en/v2/Git-Internals-Plumbing-and-Porcelain)
+* [What does the git index contain EXACTLY? - StackOverflow](https://stackoverflow.com/questions/4084921/what-does-the-git-index-contain-exactly)
