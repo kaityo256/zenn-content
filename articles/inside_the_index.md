@@ -141,7 +141,11 @@ $ git commit -m "Initial commit"
  create mode 100644 test.txt
 ```
 
-無事にコミットされ、`fc4050c`というコミットオブジェクトが作られました。`.git`がどうなっているか見てみましょう。
+無事にコミットされ、`fc4050c`というコミットオブジェクトが作られました。
+
+![index](inside_the_index/index.png)
+
+`.git`がどうなっているか見てみましょう。
 
 ```sh
 $ tree .git
@@ -188,8 +192,8 @@ commit
 ```sh
 $ git cat-file -p fc4050c
 tree b40d873c372b28782e7bef9ab962a971b43fc1ca
-author H. Watanabe <kaityo256@hogehoge.jp> 1628835374 +0900
-committer H. Watanabe <kaityo256@hogehoge.jp> 1628835374 +0900
+author H. Watanabe <kaityo256@example.com> 1628835374 +0900
+committer H. Watanabe <kaityo256@example.com> 1628835374 +0900
 
 Initial commit
 ```
@@ -313,6 +317,8 @@ $ git ls-files --stage
 100644 363d8b784900d74b3159e8e93a651c0db42629ef 0    test.txt
 ```
 
+![index](inside_the_index/switch.png)
+
 つまり、ブランチ切り替えの際、ワーキングツリーだけでなく、インデックスも切り替えられています。
 
 ## ハッシュが同じファイル
@@ -375,8 +381,8 @@ $ git ls-files --stage
 ```sh
 $ git cat-file -p 5f5cabe
 tree 44c2534716a893ea86255ceddaf2afbf9e89b882
-author H. Watanabe <kaityo256@hogehoge.jp> 1628841438 +0900
-committer H. Watanabe <kaityo256@hogehoge.jp> 1628841438 +0900
+author H. Watanabe <kaityo256@example.com> 1628841438 +0900
+committer H. Watanabe <kaityo256@example.com> 1628841438 +0900
 
 initial commit
 ```
