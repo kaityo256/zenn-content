@@ -3,7 +3,7 @@ title: "虚数の虚数乗の話"
 emoji: "🤖"
 type: "idea" # tech: 技術記事 / idea: アイデア
 topics: ["数学"]
-published: false
+published: true
 ---
 
 ## はじめに
@@ -126,7 +126,7 @@ $$
 
 いま、$y = 2^x$という関数を考えましょう。最初は$x$は自然数でした。それが整数に拡張され、さらに有理数全体まで拡張が完了しました。これをグラフにプロットすれば、非常になめらかに見える関数が書けます。しかし、有理数全体は「すかすか」なので、これをなめらかにつないで「実数全体」に拡張したくなります。
 
-![exponential](exponential_function/continuous.png)
+![exponential](https://github.com/kaityo256/zenn-content/raw/main/articles/exponential_function/continuous.png)
 
 実数を考えるということは、極限を考えること、つまり微分について考えることを意味します。つまり、$y = 2^x$という関数に対して、$x$に関する微分が定義できれば、$x$として実数全体に適用範囲を広げたことになります。
 
