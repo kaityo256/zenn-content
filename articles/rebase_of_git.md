@@ -14,13 +14,13 @@ Gitのrebaseは、(特にSubversionから入ってきた人にとって)理解�
 
 ## コミットと差分
 
-![commit.png](rebase_of_git/commit.png)
+![commit.png](https://github.com/kaityo256/zenn-content/raw/main/articles/rebase_of_git/commit.png)
 
 Gitのコミットは親コミットを覚えており、それをたどることで歴史を逆にさかのぼって行くことができます。Gitでは歴史を玉と線で表現することが多いです。玉はコミットを表し、コミットはその時点でのスナップショットを表しています。玉と玉の間の線は差分(パッチ)を表しており、一つ前のコミットにそのパッチを適用することで次のコミットが得られる、と解釈できます。
 
 ## マージとリベース
 
-![beforemerge.png](rebase_of_git/beforemerge.png)
+![beforemerge.png](https://github.com/kaityo256/zenn-content/raw/main/articles/rebase_of_git/beforemerge.png)
 
 いま、歴史が分岐しているとしましょう。`master`と`branch`の二つのブランチがあり、共通のコミットからそれぞれ歴史が進んでいます。`branch`で加わった修正を`master`に取り込みたいとき、Gitは`merge`か`rebase`の二つの手段を選ぶことができます。
 
@@ -28,11 +28,11 @@ Gitのコミットは親コミットを覚えており、それをたどるこ�
 
 マージする場合は両方の修正を一度に取り込んだコミットを作ります。`master`ブランチから`branch`にたいして`git merge`をかけた場合、こんな感じになります。
 
-![aftermerge.png](rebase_of_git/aftermerge.png)
+![aftermerge.png](https://github.com/kaityo256/zenn-content/raw/main/articles/rebase_of_git/aftermerge.png)
 
 この時、二つの歴史が一つになります。したがって、現在`master`が指しているコミットの親は二つになります。親とつながる線は「その親から自分になるための修正パッチ」を意味しているため、それぞれ図示するとこんな感じになります。
 
-![patch.png](rebase_of_git/patch.png)
+![patch.png](https://github.com/kaityo256/zenn-content/raw/main/articles/rebase_of_git/patch.png)
 
 ### リベースの場合
 
@@ -40,11 +40,11 @@ Gitのコミットは親コミットを覚えており、それをたどるこ�
 
 するとGitは、`master`と`branch`の共通祖先から、`branch`の現在のコミットまでを切り出し、`master`の先につなげます。これにより`branch`の指すコミットの直接の祖先が`master`になるため、Fast Forwardマージが可能になります。
 
-![rebase.png](rebase_of_git/rebase.png)
+![rebase.png](https://github.com/kaityo256/zenn-content/raw/main/articles/rebase_of_git/rebase.png)
 
 この図だけ見ると、`branch`にぶら下がっていたコミットを「移動」したように見えますが、実際には`branch`のコミット間から「パッチ」を取り出し、それを順番に適用することで新たにコミットを作っています。先ほどまでの図の例で見てみましょう。
 
-![rebase2.png](rebase_of_git/rebase2.png)
+![rebase2.png](https://github.com/kaityo256/zenn-content/raw/main/articles/rebase_of_git/rebase2.png)
 
 この図を見ると、新しくできた`c1'`や`c2'`コミットは、リベース前の対応するコミット`c1`、`c2`とは異なるスナップショットを表していることがわかります。むしろ変わっていないのは、`c1`や`c1'`から親コミットに向かって伸びる線が表すパッチです。つまり、「リベースとは、玉(コミット)ではなく、線(パッチ)を移動する操作である」と理解できます。
 
@@ -56,7 +56,7 @@ Gitのコミットは親コミットを覚えており、それをたどるこ�
 
 デフォルトは`pick`です。`-i`をつけずに`rebase`した場合は、リベース対象となっている玉の数だけ、リベース先にくっつくことになります。
 
-![squash.png](rebase_of_git/squash.png)
+![squash.png](https://github.com/kaityo256/zenn-content/raw/main/articles/rebase_of_git/squash.png)
 
 `squash`は、コミットをまとめます。図を見ると「玉(コミット)をまとめる」というよりは「線(パッチ)をまとめる」といった方が実態に近い気がします。
 
