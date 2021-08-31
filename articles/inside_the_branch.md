@@ -12,6 +12,8 @@ Gitのブランチがどう実装されているか見てみましょう、と�
 
 ## HEADとブランチの実体
 
+![head](https://github.com/kaityo256/zenn-content/raw/main/articles/inside_the_branch/head.png)
+
 通常、GitではHEADがブランチを、ブランチがコミットを指しています。例えばカレントブランチが`master`である場合を考えましょう。`HEAD`の実体は`.git/HEAD`というファイルで、`master`の実体は`.git/refs/heads/master`になっています。それを見ていきましょう。
 
 適当なディレクトリ`test`を作って、その中で`git init`しましょう。
