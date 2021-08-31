@@ -112,7 +112,11 @@ $ cat .git/HEAD
 c9503326279796b24be86bdf9beb01c1af2d2b95
 ```
 
-`HEAD`が直接コミットを指していることがわかります。`master`に戻りましょう。
+`HEAD`が直接コミットを指していることがわかります。
+
+![detached_head](https://github.com/kaityo256/zenn-content/raw/main/articles/inside_the_branch/detached_head.png)
+
+`master`に戻りましょう。
 
 ```sh
 $ git switch master
