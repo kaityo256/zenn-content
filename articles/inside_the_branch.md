@@ -179,4 +179,271 @@ branch  master
 
 問題なく消せます。`.git/refs/heads`にあったブランチの実体も消えました。つまり、ブランチの削除は単にファイルの削除です。
 
+## 歴史の削除
 
+`git init`直後はブランチの実体ファイルが無く、その状態で`git log`をすると「一つもコミットが無いよ」と言われました。それを見てみましょう。
+
+現在、カレントブランチは`branch`で、最初のコミット`c950332`を指しています。
+
+```sh
+$ git log --oneline
+c950332 (HEAD -> branch, master) initial commit
+```
+
+`branch`の実体を消してしまいましょう。
+
+```sh
+rm .git/refs/heads/branch
+```
+
+もう一度`git log`をしてみます。
+
+```sh
+$ git log
+fatal: your current branch 'branch' does not have any commits yet
+```
+
+ブランチが無いので、「歴史がない」と判断されます。しかし、インデックスの実体`.git/index`は存在するため、`git diff`はできます。ちょっとファイルを修正して`git diff`してみましょう。
+
+```sh
+$ echo "Hi" >> hello.txt
+$ git diff
+diff --git a/hello.txt b/hello.txt
+index e965047..2236327 100644
+--- a/hello.txt
++++ b/hello.txt
+@@ -1 +1,2 @@
+ Hello
++Hi
+```
+
+この状態で`git add`、`git commit`することができます。
+
+```sh
+$ git add hello.txt
+$ git commit -m "updates hello.txt"
+[branch (root-commit) a35d7e4] updates hello.txt
+ 1 file changed, 2 insertions(+)
+ create mode 100644 hello.txt
+```
+
+ブランチの実体がなかったため、これが最初のコミット(`root-commit`)とみなされ、ここでブランチが作成されます。
+
+```sh
+$ ls .git/refs/heads
+branch  master
+```
+
+`master`に戻っておきましょう。
+
+```sh
+git switch master
+```
+
+## リモートブランチ
+
+リモートブランチも、普通にブランチと同じようにファイルで実装されています。見てみましょう。
+
+まずはリモートブランチ用のベアリポジトリを作ります。一つの上のディレクトリに掘りましょう。
+
+```sh
+git init --bare ../test.git
+```
+
+ベアリポジトリは、`.git`の中身がそのままディレクトリにぶちまけられたような内容になっています。見てみましょう。
+
+```sh
+$ tree ../test.git
+../test.git
+├── HEAD
+├── branches
+├── config
+├── description
+├── hooks
+│   ├── applypatch-msg.sample
+│   ├── commit-msg.sample
+│   ├── fsmonitor-watchman.sample
+│   ├── post-update.sample
+│   ├── pre-applypatch.sample
+│   ├── pre-commit.sample
+│   ├── pre-merge-commit.sample
+│   ├── pre-push.sample
+│   ├── pre-rebase.sample
+│   ├── pre-receive.sample
+│   ├── prepare-commit-msg.sample
+│   └── update.sample
+├── info
+│   └── exclude
+├── objects
+│   ├── info
+│   └── pack
+└── refs
+    ├── heads
+    └── tags
+
+9 directories, 16 files
+```
+
+`git init`直後の`.git`ディレクトリと同じ中身になっていますね。
+
+さて、こいつを`origin`に指定して、上流ブランチを`origin/master`にして`push`してやりましょう。
+
+```sh
+$ git remote add origin ../test.git
+$ git push -u origin master
+Enumerating objects: 3, done.
+Counting objects: 100% (3/3), done.
+Writing objects: 100% (3/3), 227 bytes | 227.00 KiB/s, done.
+Total 3 (delta 0), reused 0 (delta 0)
+To ../test.git
+ * [new branch]      master -> master
+Branch 'master' set up to track remote branch 'master' from 'origin'.
+```
+
+これで、`origin/master`ブランチが作成され、`master`の上流ブランチとして登録されました。
+
+```sh
+$ git branch -vva
+  branch                a35d7e4 updates hello.txt
+* master                c950332 [origin/master] initial commit
+  remotes/origin/master c950332 initial commit
+```
+
+`remotes/origin/master`ブランチが作成され、`master`ブランチの上流が`origin/master`になっています。
+
+さて、`remotes/origin/master`の実体は、`.git/refs/remotes/origin/master`にあります。そこには、単にコミットハッシュが記録されているだけです。
+
+```sh
+$ cat .git/refs/remotes/origin/master
+c9503326279796b24be86bdf9beb01c1af2d2b95
+```
+
+また、`master`の実体も同じコミットハッシュを指しているだけです。
+
+```sh
+$ cat .git/refs/heads/master
+c9503326279796b24be86bdf9beb01c1af2d2b95
+```
+
+では、`master`の上流ブランチはどこで管理されているかというと、`.git/config`です。中身を見てみましょう。
+
+```sh
+$ cat .git/config
+[core]
+        repositoryformatversion = 0
+        filemode = true
+        bare = false
+        logallrefupdates = true
+[remote "origin"]
+        url = ../test.git
+        fetch = +refs/heads/*:refs/remotes/origin/*
+[branch "master"]
+        remote = origin
+        merge = refs/heads/master
+```
+
+このファイルの階層構造は`git config`でそのままたどることができます。
+
+```sh
+$ git config branch.master.remote
+origin
+
+$ git config remote.origin.url
+url = ../test.git
+```
+
+また、`git log`は、リモートブランチも調べてくれます。
+
+```sh
+$ git log --oneline
+c950332 (HEAD -> master, origin/master) initial commit
+```
+
+`origin/master`が、`master`と同じブランチを指していることがわかります。ちなみに、先ほど作った`branch`は、`master`と全く歴史を共有していないので、ここには現れません。
+
+もう一つリモートリポジトリを増やしてみましょう。
+
+```sh
+git init --bare ../test2.git
+git remote add origin2 ../test2.git
+```
+
+これで、`.git/config`には`origin2`の情報が追加されます。
+
+```sh
+$ cat .git/config
+[core]
+        repositoryformatversion = 0
+        filemode = true
+        bare = false
+        logallrefupdates = true
+[remote "origin"]
+        url = ../test.git
+        fetch = +refs/heads/*:refs/remotes/origin/*
+[branch "master"]
+        remote = origin
+        merge = refs/heads/master
+[remote "origin2"]
+        url = ../test2.git
+        fetch = +refs/heads/*:refs/remotes/origin2/*
+```
+
+しかし、まだ`origin2`の実体は作られていません。
+
+```sh
+$ tree .git/refs/remotes
+.git/refs/remotes
+└── origin
+    └── master
+
+1 directory, 1 file
+```
+
+`origin`の実体がディレクトリで、その下に`master`ファイルがありますが、`origin2`というディレクトリが無いことがわかります。
+
+さて、`master`ブランチの上流ブランチを`origin2/master`にして`push`しましょう。
+
+```sh
+$ git push -u origin2
+Enumerating objects: 3, done.
+Counting objects: 100% (3/3), done.
+Writing objects: 100% (3/3), 227 bytes | 227.00 KiB/s, done.
+Total 3 (delta 0), reused 0 (delta 0)
+To ../test2.git
+ * [new branch]      master -> master
+Branch 'master' set up to track remote branch 'master' from 'origin2'.
+```
+
+これで`origin2/master`の実体が作られます。
+
+```sh
+$ tree .git/refs/remotes
+.git/refs/remotes
+├── origin
+│   └── master
+└── origin2
+    └── master
+
+2 directories, 2 files
+```
+
+そして、`origin2/master`が`master`や`origin/master`と同じコミットハッシュを指します。
+
+```sh
+$ cat .git/refs/remotes/origin2/master
+c9503326279796b24be86bdf9beb01c1af2d2b95
+```
+
+なので、`git log`に`origin2/master`も出てきます。
+
+```sh
+c950332 (HEAD -> master, origin2/master, origin/master) initial commit
+```
+
+## まとめ
+
+Gitのブランチの実装を調べてみました。ブランチはファイルとして実装され、ブランチの作成はファイルのコピー、削除はファイルの削除になっています。また、`origin/master`みたいなリモートブランチは、`origin`はディレクトリとして実装されています。上流ブランチなどの情報は`.git/config`にあり、`git config`で表示できる情報は、そのまま`.git/config`内のファイルの構造に対応しています。なんというか、すごく「そのまま」実装されている印象ですね。
+
+## 参考文献
+
+* [Pro Git - 10.1 Git Internals](https://git-scm.com/book/en/v2/Git-Internals-Plumbing-and-Porcelain)
