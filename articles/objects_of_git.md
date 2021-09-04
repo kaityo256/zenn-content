@@ -154,6 +154,8 @@ $ git commit -am "update"
  1 file changed, 1 insertion(+), 1 deletion(-)
 ```
 
+![commit.png](objects_of_git/commit.png)
+
 新しく`1f620eb`というコミットができました。中身を見てみましょう。
 
 ```sh
@@ -166,7 +168,38 @@ committer Robota <kaityo256@example.com> 1630738892 +0900
 update
 ```
 
+スナップショットを表すtreeオブジェクトが`dd1d7ee`から`55e11d0`に更新され、新たに親コミットとして、先ほどの`ca70291`が保存されています。
 
+マージにより作られたマージコミットの場合は、二つの親コミットの情報を含んでいます。いま、こんな歴史を持つリポジトリを考えましょう。
+
+```sh
+$ git log --graph --pretty=oneline
+*   f4baa057ce89467a2faced36229da02799c9e394 (HEAD -> master) Merge branch 'branch'
+|\
+| * 6aecd68aa423651edda9d22e20925314ff3e8386 (branch) update
+* | 953cb6056e5f0437f0d4e102f232d8eb705f6428 adds test2.txt
+|/
+* 6db4350c6ebd75338ac4bc2eb2a2924895a0c73b initial commit
+```
+
+root commitである`6db4350`から`6aecd68`と`953cb60`が分岐し、マージされて`f4baa05`になっています。
+
+![merge](objects_of_git/merge.png)
+
+この最後のマージコミット`f4baa05`の中身を見てみましょう。
+
+```sh
+$ git cat-file -p f4baa05
+tree 706a1741c1d94977ba496449d80ab848ca945e14
+parent 953cb6056e5f0437f0d4e102f232d8eb705f6428
+parent 6aecd68aa423651edda9d22e20925314ff3e8386
+author Robota <kaityo256@example.com> 1630743012 +0900
+committer Robota <kaityo256@example.com> 1630743012 +0900
+
+Merge branch 'branch'
+```
+
+スナップショットを保存するtreeオブジェクト`706a174`の他に、二つの親コミット`953cb60`と`6aecd68`が保存されていることがわかります。
 
 ## treeオブジェクト
 
@@ -199,7 +232,7 @@ $ git commit -m "initial commit"
 これで、コミットオブジェクト(662458a)が作られました。中身を見てみましょう。
 
 ```sh
-$ git cat-file -p 662458a33b02ccf5db587b9fe978e231a9aca0f5
+$ git cat-file -p 662458a
 tree 193fea0500b331a7ccb536aa691d8eb7df8afd13
 author Robota <kaityo256@example.com> 1630737694 +0900
 committer Robota <kaityo256@example.com> 1630737694 +0900
@@ -207,7 +240,24 @@ committer Robota <kaityo256@example.com> 1630737694 +0900
 initial commit
 ```
 
-同じ手順を踏めば、コミットハッシュは異なっても、同じtreeオブジェクトができているはずです。このコミット
+treeオブジェクトとコミットメッセージ等の情報を含んでいます。root commitなので、親コミットの情報はありません。同じ手順を踏めば、コミットハッシュは異なっても、同じtreeオブジェクトができているはずです。treeオブジェクト`193fea0`は、このコミットのスナップショットを保存しています。見てみましょう。
+
+```sh
+$ git cat-file -p 193fea0
+100644 blob e845566c06f9bf557d35e8292c37cf05d97a9769    README.md
+040000 tree 0b9f291245f6c596fd30bee925fe94fe0cbadd60    dir1
+040000 tree 345699cffb47ac20257e0ce4cebcbfc4b2a7f9e3    dir2
+```
+
+ファイル`README.md`に対応する`blob`オブジェクトと、ディレクトリ`dir1`、`dir2`に対応するtreeオブジェクトが含まれています。二つのtreeオブジェクトも見てみましょう。
+
+```sh
+$ git cat-file -p 0b9f291
+100644 blob e2129701f1a4d54dc44f03c93bca0a2aec7c5449    file1.txt
+$ git cat-file -p 345699c
+100644 blob 6c493ff740f9380390d5c9ddef4af18697ac9375    file2.txt
+```
+
 
 ## タグオブジェクト
 
