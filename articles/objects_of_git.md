@@ -12,7 +12,7 @@ published: false
 
 ## オブジェクトの種類
 
-![objects](objects_of_git/objects.png)
+![objects](https://github.com/kaityo256/zenn-content/raw/main/articles/objects_of_git/objects.png)
 
 Gitは、内部でファイルやコミットを「オブジェクト」として`.git/objects`以下に保存しています。オブジェクトには以下の4種類があります。
 
@@ -23,7 +23,7 @@ Gitは、内部でファイルやコミットを「オブジェクト」とし�
 
 ## blobオブジェクト
 
-![blob](objects_of_git/blob.png)
+![blob](https://github.com/kaityo256/zenn-content/raw/main/articles/objects_of_git/blob.png)
 
 blob[^blob]オブジェクトは、ファイルを保存するためのオブジェクトです。その実体は、ファイルに`blob ファイルサイズ`というヘッダ情報を付加し、zlibで圧縮したものです。
 
@@ -154,7 +154,7 @@ $ git commit -am "update"
  1 file changed, 1 insertion(+), 1 deletion(-)
 ```
 
-![commit.png](objects_of_git/commit.png)
+![commit.png](https://github.com/kaityo256/zenn-content/raw/main/articles/objects_of_git/commit.png)
 
 新しく`1f620eb`というコミットができました。中身を見てみましょう。
 
@@ -184,7 +184,7 @@ $ git log --graph --pretty=oneline
 
 root commitである`6db4350`から`6aecd68`と`953cb60`が分岐し、マージされて`f4baa05`になっています。
 
-![merge](objects_of_git/merge.png)
+![merge](https://github.com/kaityo256/zenn-content/raw/main/articles/objects_of_git/merge.png)
 
 この最後のマージコミット`f4baa05`の中身を見てみましょう。
 
@@ -260,7 +260,7 @@ $ git cat-file -p 345699c
 
 ファイル構造とオブジェクトの構造を図示するとこんな感じです。
 
-![tree.png](objects_of_git/tree.png)
+![tree.png](https://github.com/kaityo256/zenn-content/raw/main/articles/objects_of_git/tree.png)
 
 さて、blobオブジェクトやtreeオブジェクトにはファイル名、ディレクトリ名は含まれておらず、treeオブジェクトは、自分が管理するオブジェクトと名前の対応を管理しています[^ext4]。
 
@@ -370,7 +370,7 @@ tag wit annotation
 
 コミットオブジェクト`ca686d2`を指しており、そこにタグを付けた人の情報やタグをつけた時のメッセージが含まれていることがわかります。
 
-![tag.png](objects_of_git/tag.png)
+![tag.png](https://github.com/kaityo256/zenn-content/raw/main/articles/objects_of_git/tag.png)
 
 つまり、タグとしては`lightweight_tag`も`annotated_tag`も同じコミットを指していますが、軽量タグ`lightweight_tag`が直接コミットオブジェクトを指しているのに対して、注釈付きタグ`annotated_tag`は、コミットオブジェクトを「包んだ」タグオブジェクトを指しています。これにより、コミットメッセージとは別に、タグをつけた時にメッセージを保存できるようになっています。
 
