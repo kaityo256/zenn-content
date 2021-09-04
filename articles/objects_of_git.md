@@ -23,6 +23,8 @@ Gitは、内部でファイルやコミットを「オブジェクト」とし�
 
 ## blobオブジェクト
 
+![blob](objects_of_git/blob.png)
+
 blob[^blob]オブジェクトは、ファイルを保存するためのオブジェクトです。その実体は、ファイルに`blob ファイルサイズ`というヘッダ情報を付加し、zlibで圧縮したものです。
 
 [^blob]: [Binary Large OBjectsの略](https://docs.github.com/en/rest/reference/git#blobs)らしい。
