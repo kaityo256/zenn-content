@@ -258,6 +258,55 @@ $ git cat-file -p 345699c
 100644 blob 6c493ff740f9380390d5c9ddef4af18697ac9375    file2.txt
 ```
 
+ファイル構造とオブジェクトの構造を図示するとこんな感じです。
+
+![tree.png](objects_of_git/tree.png)
+
+さて、blobオブジェクトやtreeオブジェクトにはファイル名、ディレクトリ名は含まれておらず、treeオブジェクトは、自分が管理するオブジェクトと名前の対応を管理しています[^ext4]。
+
+[^ext4]: ファイルシステム(例えばext4)のinodeと同じノリです。
+
+また、blobオブジェクトのハッシュは、ファイルサイズと中身だけで決まり、ファイル名は関係ありません。したがって、Gitは「同じ中身だけど、異なるファイル名」を、同じblobオブジェクトで管理します。見てみましょう。
+
+```s
+mkdir synonym
+cd synonym
+git init
+echo "Hello" > file1.txt
+cp file1.txt file2.txt
+git add file1.txt file2.txt
+```
+
+これで、中身が同じファイル`file1.txt`、`file2.txt`がステージングされました。コミットしてみましょう。
+
+```sh
+$ git commit -m "initial commit"
+[master (root-commit) 75470e6] initial commit
+ 2 files changed, 2 insertions(+)
+ create mode 100644 file1.txt
+ create mode 100644 file2.txt
+```
+
+コミットオブジェクト`75470e6`ができたので、中身を見てみます。
+
+```sh
+$ git cat-file -p 75470e6
+tree e79a5d99a8e5cd5da0260866b85df60052fd045e
+author Robota <kaityo256@example.com> 1630745015 +0900
+committer Robota <kaityo256@example.com> 1630745015 +0900
+
+initial commit
+```
+
+treeオブジェクト`e79a5d9`ができました。中身を見てみましょう。
+
+```sh
+$ git cat-file -p e79a5d9
+100644 blob e965047ad7c57865823c7d992b1d046ea66edf78    file1.txt
+100644 blob e965047ad7c57865823c7d992b1d046ea66edf78    file2.txt
+```
+
+全く同じblobオブジェクトに別名を与えていることがわかります。
 
 ## タグオブジェクト
 
