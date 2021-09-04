@@ -123,6 +123,92 @@ $ od -tx1 .git/objects/e5/1ca0d0b8c5b6e02473228bbf876ba000932e96
 
 完全に一致していますね。
 
+## コミットオブジェクト
+
+コミットオブジェクトは、コミット、すなわちスナップショットを保存するためのものです。スナップショットは、次の説明するtreeオブジェクトが保存しています。また、親コミットの情報も持っています。以上をまとめると、コミットオブジェクトは
+
+* スナップショットと保存するtreeオブジェクト
+* 親コミットのコミットハッシュ
+  * root-commitなら親コミット情報なし
+  * merge commitなら親コミット情報二つ
+* コミットの作成者情報
+* コミットメッセージ
+
+をまとめたものです。さっき作ったコミットオブジェクト`ca70291`を見てみましょう。
+
+```sh
+$ git cat-file -p ca70291
+tree dd1d7ee1e23a241a3597a0d0be5139a997fc29c8
+author Robota <kaityo256@example.com> 1630735083 +0900
+committer Robota <kaityo256@example.com> 1630735083 +0900
+
+initial commit
+```
+
+treeコミット、作成者、コミットメッセージを含んでいることがわかります。なお、これはroot commitなので、親コミットの情報は持っていません。適当に修正してコミットしてみましょう。
+
+```sh
+$ echo "Hello commit object" >> test.txt
+$ git commit -am "update"
+[master 1f620eb] update
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+```
+
+新しく`1f620eb`というコミットができました。中身を見てみましょう。
+
+```sh
+$ git cat-file -p 1f620eb
+tree 55e11d02569af14b5d29fe56fd44c1cc32c55e72
+parent ca70291031230dde40264d62b6e8d2424e2c9366
+author Robota <kaityo256@example.com> 1630738892 +0900
+committer Robota <kaityo256@example.com> 1630738892 +0900
+
+update
+```
+
+
+
+## treeオブジェクト
+
+treeオブジェクトは、ディレクトリに対応するオブジェクトです。先ほどのblobオブジェクトの作り方を見てわかるように、blobオブジェクトはファイル名を保存していません。blobオブジェクトとファイル名を対応させるのもtreeオブジェクトの役目です。また、コミットオブジェクトが格納するのは、スナップショット全体を表現するtreeオブジェクトです。
+
+treeオブジェクトがディレクトリに対応することを見るため、適当にディレクトリを含むリポジトリを作ってみましょう。
+
+```sh
+mkdir tree
+cd tree
+git init
+mkdir dir1 dir2
+echo "file1" > dir1/file1.txt
+echo "file2" > dir2/file2.txt
+echo "README" > README.md
+git add README.md dir1 dir2
+```
+
+コミットしてみます。
+
+```sh
+$ git commit -m "initial commit"
+[master (root-commit) 662458a] initial commit
+ 3 files changed, 3 insertions(+)
+ create mode 100644 README.md
+ create mode 100644 dir1/file1.txt
+ create mode 100644 dir2/file2.txt
+```
+
+これで、コミットオブジェクト(662458a)が作られました。中身を見てみましょう。
+
+```sh
+$ git cat-file -p 662458a33b02ccf5db587b9fe978e231a9aca0f5
+tree 193fea0500b331a7ccb536aa691d8eb7df8afd13
+author Robota <kaityo256@example.com> 1630737694 +0900
+committer Robota <kaityo256@example.com> 1630737694 +0900
+
+initial commit
+```
+
+同じ手順を踏めば、コミットハッシュは異なっても、同じtreeオブジェクトができているはずです。このコミット
+
 ## タグオブジェクト
 
 タグオブジェクトは、タグを付ける時にメッセージを含めた時に作成されるオブジェクトで、タグではありません。タグはあくまでブランチと同様に、主にコミットオブジェクトを指すリファレンスです。
