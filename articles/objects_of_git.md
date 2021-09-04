@@ -310,7 +310,133 @@ $ git cat-file -p e79a5d9
 
 ## タグオブジェクト
 
-タグオブジェクトは、タグを付ける時にメッセージを含めた時に作成されるオブジェクトで、タグではありません。タグはあくまでブランチと同様に、主にコミットオブジェクトを指すリファレンスです。
+タグオブジェクトは、注釈付きタグをつける時に作成されるオブジェクトで、タグではありません。タグはあくまでブランチと同様に、主にコミットオブジェクトを指すリファレンスです。
 
 タグには軽量タグ(lightweight tag)と、注釈付きタグ(annotated tag)がありますが、いずれもタグの実体は`.`git/refs/tags`の中に、タグと同名のファイルとして保存されています。
 
+適当なリポジトリを作り、root commitを作りましょう。
+
+```sh
+$ mkdir tag
+$ cd tag
+$ git init
+$ echo "Hello Tag" > test.txt
+$ git add test.txt
+$ git commit -m "initial commit"
+[master (root-commit) ca686d2] initial commit
+ 1 file changed, 1 insertion(+)
+ create mode 100644 test.txt
+```
+
+これでroot commitとしてコミットオブジェクト`ca686d2`ができました。これに軽量タグと注釈付きタグを付けてみましょう。`git tag`で、タグ名だけを指定すると軽量タグになります。
+
+```sh
+git tag lightweight_tag
+```
+
+こうして出来たタグは、直接コミットオブジェクトを指しています。タグの実体は`.git/refs/tags`にあります。見てみましょう。
+
+```sh
+$ cat .git/refs/tags/lightweight_tag
+ca686d23b06faada3e1955ad022bfa11be5cc2a2
+```
+
+先ほど作られたコミットオブジェクトを指しています。つまり、軽量タグはブランチと全く同じ実装になっています。
+
+タグを作る際に`-m`などでメッセージを付けると、注釈付きタグが作られます。
+
+```sh
+git tag annotated_tag -m "tag wit annotation"
+```
+
+注釈付きタグも、オブジェクトを指すのは同じですが、指しているのはコミットオブジェクトではありません。
+
+```sh
+$ cat .git/refs/tags/annotated_tag
+a6e23bf19c7c64775942f9971aed984c8af4e304
+```
+
+新たにタグオブジェクト`a6e23bf`が作られ、そこを指していました。中身を見てみましょう。
+
+```sh
+$ git cat-file -p a6e23bf
+object ca686d23b06faada3e1955ad022bfa11be5cc2a2
+type commit
+tag annotated_tag
+tagger Robota <kaityo256@example.com> 1630745563 +0900
+
+tag wit annotation
+```
+
+コミットオブジェクト`ca686d2`を指しており、そこにタグを付けた人の情報やタグをつけた時のメッセージが含まれていることがわかります。
+
+![tag.png](objects_of_git/tag.png)
+
+つまり、タグとしては`lightweight_tag`も`annotated_tag`も同じコミットを指していますが、軽量タグ`lightweight_tag`が直接コミットオブジェクトを指しているのに対して、注釈付きタグ`annotated_tag`は、コミットオブジェクトを「包んだ」タグオブジェクトを指しています。これにより、コミットメッセージとは別に、タグをつけた時にメッセージを保存できるようになっています。
+
+なお、タグオブジェクトはコミットオブジェクトだけでなく、どんなオブジェクトに対しても作ることができます。
+
+```sh
+$ git cat-file -p ca686d2
+tree 65e9e7f6be25f8882af44cdf8485dc36556bfd8c
+author Robota <kaityo256@example.com> 1630745294 +0900
+committer Robota <kaityo256@example.com> 1630745294 +0900
+
+initial commit
+```
+
+スナップショットを保存しているtreeオブジェクト`65e9e7f`にタグをつけてみましょう。
+
+```sh
+git tag tag_on_tree_light 65e9e7f
+```
+
+treeオブジェクトを指す軽量タグが作成されました。中身はtreeオブジェクトのハッシュを指しています。
+
+```sh
+$ cat .git/refs/tags/tag_on_tree_light
+65e9e7f6be25f8882af44cdf8485dc36556bfd8c
+```
+
+タグオブジェクトを作ることもできます。
+
+```sh
+$ git tag tag_on_tree_annotated 65e9e7f -m "tag on tree"
+$ cat .git/refs/tags/tag_on_tree_annotated
+1806f1c1a58944fcc9fff52da4201ac9410b5923
+$ git cat-file -p 1806f1c
+object 65e9e7f6be25f8882af44cdf8485dc36556bfd8c
+type tree
+tag tag_on_tree_annotated
+tagger Robota <kaityo256@example.com> 1630746476 +0900
+
+tag on tree
+```
+
+「treeオブジェクトについたタグだよ(`type tree`)」という情報とともに、treeオブジェクトを包んだタグオブジェクトができました。
+
+コミットオブジェクトを指しているタグならば、そこからブランチを作ることができます。
+
+```sh
+$ git switch -c branch_from_tag annotated_tag
+Switched to a new branch 'branch_from_tag'
+```
+
+しかし、コミットオブジェクト以外を指しているタグからブランチを作ることはできません。
+
+```sh
+$ git switch -c branch_from_tree tag_on_tree_annotated
+fatal: Cannot switch branch to a non-commit 'tag_on_tree_annotated'
+```
+
+## まとめ
+
+Gitのオブジェクトについてまとめてました。blobオブジェクトがヘッダをつけてzlibで圧縮しているだけであったり、treeオブジェクトがディレクトリと対応していたりと、非常に素直な実装になっていることがわかります。また、Gitが管理するのはあくまでもblobオブジェクトであるため、空ディレクトリは管理対象外になる理由もわかります。タグとタグオブジェクトは違うもので、タグが指しているのはあくまでもオブジェクトであり、それが直接コミットを指すか(軽量タグ)、タグオブジェクトを指すか(注釈付きタグ)の違いがあります。
+
+これくらいわかると、`.git`の中身がほぼ理解できると思います。中身が理解できたからといって特にGitの利用に役に立つわけではありませんが、「なるほどなぁ」と思っていただければ幸いです。
+
+## 参考文献
+
+* [Gitのインデックスの中身](https://zenn.dev/kaityo256/articles/inside_the_index)
+* [Gitのブランチの実装](https://zenn.dev/kaityo256/articles/inside_the_branch)
+* [Pro Git - 10. Gitの内側](https://git-scm.com/book/ja/v2/Git%E3%81%AE%E5%86%85%E5%81%B4-%E9%85%8D%E7%AE%A1%EF%BC%88Plumbing%EF%BC%89%E3%81%A8%E7%A3%81%E5%99%A8%EF%BC%88Porcelain%EF%BC%89)
