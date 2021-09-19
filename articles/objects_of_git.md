@@ -129,8 +129,8 @@ $ od -tx1 .git/objects/e5/1ca0d0b8c5b6e02473228bbf876ba000932e96
 
 * スナップショットを保存するtreeオブジェクト
 * 親コミットのコミットハッシュ
-  * root-commitなら親コミット情報なし
-  * merge commitなら親コミット情報二つ
+    * root-commitなら親コミット情報なし
+    * merge commitなら親コミット情報二つ
 * コミットの作成者情報
 * コミットメッセージ
 
