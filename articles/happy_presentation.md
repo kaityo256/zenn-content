@@ -3,7 +3,7 @@ title: "プレゼンテーションの準備と評価の仕方覚書"
 emoji: "🤖"
 type: "idea" # tech: 技術記事 / idea: アイデア
 topics: ["発表", "研究発表", "技術発表"]
-published: false
+published: true
 ---
 
 ## はじめに
@@ -80,7 +80,7 @@ published: false
 
 比較したいものを一つの図にまとめましょう。
 
-![fig_comment](happy_presentation/fig_comment.png)
+![fig_comment](https://github.com/kaityo256/zenn-content/blob/main/articles/happy_presentation/fig_comment.png?raw=true)
 
 図を入れた時、その図を見てわかることと、その意味を両方スライドに書き込むと良いでしょう。例えば、高温側で理論値と実験値が良く一致している一方、低温側でずれが大きいグラフがある時、口頭で説明するだけでなく、「低温側でずれが大きい」と図に書き込むことで、聴衆は「あ、このずれを見て欲しいんだな」とわかります。さらに、図の下に「〇〇理論が低温側で良い近似になっていない」などと、「「図を見てわかったこと」から導かれること」を書いておくと、聴衆は口頭説明無しでも、このスライドの「言いたいこと」がわかりやすくなります。また、発表者も言いたいことのいい忘れを防ぐことができます。
 
