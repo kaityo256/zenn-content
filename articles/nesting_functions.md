@@ -186,3 +186,7 @@ See <file:///usr/share/doc/gcc-9/README.Bugs> for instructions.
 * [関数ポインタと関数オブジェクトのインライン展開](https://qiita.com/kaityo256/items/5911d50c274465e19cf6)
 * [インテルコンパイラのアセンブル時最適化](https://qiita.com/kaityo256/items/e7b05eb9c2bfbbd434a7)
 * [GCCの最適化がインテルコンパイラより賢くて驚いた話](https://qiita.com/kaityo256/items/72c1bf93a210e450308c)
+
+動画もあります。
+
+* [コンパイラのいじめ方(YouTube)](https://www.youtube.com/watch?v=rC-YSvtRrHw) CPP MIXで話したもの
