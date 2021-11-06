@@ -1,14 +1,14 @@
 ---
-title: "GCCに27957段ネストした関数を食わせると死ぬ"
+title: "GCCに27958段ネストした関数を食わせると死ぬ"
 emoji: "🤖"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["C++","GCC","C"]
-published: false
+published: true
 ---
 
 ## TL;DR
 
-`f(f(f(f(1))))`のように関数をネストして呼び出す時、27957段以上ネストするとGCCが死ぬので気を付けましょう。
+`f(f(f(f(1))))`のように関数をネストして呼び出す時、27958段以上ネストするとGCCが死ぬので気を付けましょう。
 
 ## はじめに
 
@@ -140,23 +140,23 @@ def check(n)
 end
 
 n = (10..100000).bsearch {|n| check(n)}
-puts "GCC dies by #{n} times nested functions."
+puts "GCC dies by #{n+1} times nested functions."
 ```
 
 実行してみます。
 
 ```sh
 $ ruby binsearch.rb
-GCC dies by 27957 times nested functions.
+GCC dies by 27958 times nested functions.
 ```
 
-27957段で死ぬようです。試してみましょう。
+27958段で死ぬようです。試してみましょう。
 
 ```sh
-$ ruby test.rb 27956;gcc -O3 -S test.c;echo $?
+$ ruby test.rb 27957;gcc -O3 -S test.c;echo $?
 0
 
-$ ruby test.rb 27957;gcc -O3 -S test.c;echo $?
+$ ruby test.rb 27958;gcc -O3 -S test.c;echo $?
 gcc: internal compiler error: Segmentation fault signal terminated program cc1
 Please submit a full bug report,
 with preprocessed source if appropriate.
@@ -164,7 +164,7 @@ See <file:///usr/share/doc/gcc-9/README.Bugs> for instructions.
 4
 ```
 
-確かに27956段までは大丈夫(たまに死にますが)で、27967段では確実に死にますね。
+確かに27957段までは大丈夫(たまに死にますが)で、27968段では確実に死にますね(環境により揺らぐようです)。
 
 ## まとめ
 
@@ -172,7 +172,7 @@ See <file:///usr/share/doc/gcc-9/README.Bugs> for instructions.
 
 新たなトリビアが生まれた。
 
-「GCCに27957段ネストした関数を食わせると死ぬ」
+「GCCに27958段ネストした関数を食わせると死ぬ」
 
 というわけで、皆さんも関数を多段ネストしたくなった時は27000段くらいで止めておくのが良いと思います。
 

@@ -14,4 +14,4 @@ def check(n)
 end
 
 n = (10..100000).bsearch {|n| check(n)}
-puts "GCC dies by #{n} times nested functions."
+puts "GCC dies by #{n+1} times nested functions."
