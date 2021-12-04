@@ -1,5 +1,5 @@
 ---
-title: "インクリメント演算子のコンパイラの気持ち"
+title: "インクリメント演算子とコンパイラの気持ち"
 emoji: "🤖"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["C","GCC","clang","LLVM"]
