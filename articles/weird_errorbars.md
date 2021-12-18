@@ -14,25 +14,25 @@ published: false
 
 例えばこんなグラフがあったとします。
 
-![weird_errorbars/exp1.png](weird_errorbars/exp1.png)
+![weird_errorbars/exp1.png](https://raw.githubusercontent.com/kaityo256/zenn-content/main/articles/weird_errorbars/exp1.png)
 
 何かが時間に対して指数関数的に減衰していることを表しているようです。僕は発表でこういうグラフを見かけたら「ん？」と思います。
 
 一方こちらのグラフは、少なくともエラーバーの付き方はまともです。
 
-![weird_errorbars/exp2.png](weird_errorbars/exp2.png)
+![weird_errorbars/exp2.png](https://raw.githubusercontent.com/kaityo256/zenn-content/main/articles/weird_errorbars/exp2.png)
 
 ### ケース2
 
 もし、観測値のそれぞれに独立なノイズが乗っているのであれば、エラーバーは、観測回数を増やせば減っていくはずです。観測回数$n$に対して、物理量の推定値とエラーバーがどうなるかを表したグラフでこんなものがあったとします。
 
-![weird_errorbars/corr1.png](weird_errorbars/corr1.png)
+![weird_errorbars/corr1.png](https://raw.githubusercontent.com/kaityo256/zenn-content/main/articles/weird_errorbars/corr1.png)
 
 試行回数$n$を増やすにつれて、平均値は$0.5$に収束し、さらにエラーバーも小さくなっています。一見それっぽく見えますが、僕はこのグラフを見たら「ん？」と思います。
 
 一方、こちらも同様なグラフです。
 
-![weird_errorbars/corr2.png](weird_errorbars/corr2.png)
+![weird_errorbars/corr2.png](https://raw.githubusercontent.com/kaityo256/zenn-content/main/articles/weird_errorbars/corr2.png)
 
 試行回数$n$を増やすにつれて、平均値は$0.5$に収束し、さらにエラーバーも小さくなっているのは先程と同じですが、こちらはまっとうなグラフに見えます。
 
@@ -40,17 +40,17 @@ published: false
 
 シミュレーションでは、時系列を追うことがあります。例えば生データとしてこんなのが得られたとしましょう。
 
-![raw](weird_errorbars/langevin_raw.png)
+![raw](https://raw.githubusercontent.com/kaityo256/zenn-content/main/articles/weird_errorbars/langevin_raw.png)
 
 これじゃわけがわからないので、一定区間ごとに区切って平均を取ります。ついでにエラーバーもつけましょう。
 
-![ave](weird_errorbars/langevin.png)
+![ave](https://raw.githubusercontent.com/kaityo256/zenn-content/main/articles/weird_errorbars/langevin.png)
 
 慣れている人が見れば、このエラーバーはおかしいと思うでしょう。しかし、エラーバーに詳しく無い人はこのままのグラフを使ってしまいがちです。
 
 以下は「ある処理」をしたデータに対して、同様な解析をしたものです。
 
-![ave2](weird_errorbars/langevin2.png)
+![ave2](https://raw.githubusercontent.com/kaityo256/zenn-content/main/articles/weird_errorbars/langevin2.png)
 
 こちらはエラーバーがまともです。
 
@@ -71,11 +71,11 @@ $$
 
 さて、エラーバーの範囲に「真の値」を含む確率が68%なのですから、逆に言えば3回に一度は「真の値」はエラーバーの範囲外にあるはずです。それを踏まえて、先程のケース1のグラフをもう一度見てみましょう。
 
-![weird_errorbars/exp1.png](weird_errorbars/exp1.png)
+![weird_errorbars/exp1.png](https://raw.githubusercontent.com/kaityo256/zenn-content/main/articles/weird_errorbars/exp1.png)
 
 なんとなく指数関数的な減衰が見えますね。ありそうな指数関数を重ねてみましょう。
 
-![weird_errorbars/exp1_line.png](weird_errorbars/exp1_line.png)
+![weird_errorbars/exp1_line.png](https://raw.githubusercontent.com/kaityo256/zenn-content/main/articles/weird_errorbars/exp1_line.png)
 
 この線は、「この計算の精度を高くしていったら、データはこの線に収束する」と期待される線です。これを見ると、全てのデータ点について、この線にエラーバーがかかってしまっています。3つに1つは外れないとおかしいのですから、このエラーバーは明らかに大きすぎです。
 
@@ -115,7 +115,7 @@ for i in range(10):
 
 こうして作られたグラフはこうなります。
 
-![weird_errorbars/exp2_line.png](weird_errorbars/exp2_line.png)
+![weird_errorbars/exp2_line.png](https://raw.githubusercontent.com/kaityo256/zenn-content/main/articles/weird_errorbars/exp2_line.png)
 
 実線に対して、エラーバーが重ならない点がでてきました。こちらはまっとうなデータに見えます。
 
@@ -129,7 +129,7 @@ for i in range(10):
 
 観測回数$n$に対して、期待値とエラーバーがどうなるかを見たのが以下のグラフです。
 
-![weird_errorbars/corr1.png](weird_errorbars/corr1_line.png)
+![weird_errorbars/corr1.png](https://raw.githubusercontent.com/kaityo256/zenn-content/main/articles/weird_errorbars/corr1_line.png)
 
 確かに試行回数を増やすと平均値は0.5に収束し、さらにエラーバーも小さくなっていくのが見ます。しかし、こんなグラフを見たら「ん？」と思わなくてはいけません。
 
@@ -172,7 +172,7 @@ for i in range(4, 12):
 
 こちらは、データセット毎に全く新たに乱数を作っているため、異なるデータセット間で相関はありません。すると、こんなグラフになります。
 
-![weird_errorbars/corr2_line.png](weird_errorbars/corr2_line.png)
+![weird_errorbars/corr2_line.png](https://raw.githubusercontent.com/kaityo256/zenn-content/main/articles/weird_errorbars/corr2_line.png)
 
 0.5の周りに均等にバラけているのがわかります。
 
@@ -184,7 +184,7 @@ for i in range(4, 12):
 
 それを踏まえて以下のグラフを見てみましょう。
 
-![ave](weird_errorbars/langevin_circle.jpg)
+![ave](https://raw.githubusercontent.com/kaityo256/zenn-content/main/articles/weird_errorbars/langevin_circle.jpg)
 
 よほど複雑な振る舞いをする関数でなければ、平均0の周りに揺らぐデータのように見えます。ところが、丸で囲んだデータは、エラーバーの幅の10倍近く外れています。5倍外れる確率が0.000057%ですから、少なくともこれは「独立なノイズによる誤差」と思ってはいけないことになります。
 
@@ -235,7 +235,7 @@ for j in range(10):
 
 こうして得られたのが以下の図です。
 
-![ave2](weird_errorbars/langevin2_line.png)
+![ave2](https://raw.githubusercontent.com/kaityo256/zenn-content/main/articles/weird_errorbars/langevin2_line.png)
 
 平均値である0の周りにデータ点が揺らいでおり、かつ、たまにエラーバーが0にかからない奴がいて、さらにエラーバーに対して「離れすぎているデータ」もいない、という、「まとも」なグラフになっています。
 
