@@ -2,13 +2,21 @@
 title: "Pythonで音を鳴らす"
 emoji: "🤖"
 type: "tech" # tech: 技術記事 / idea: アイデア
-topics: ["python","wav"]
+topics: ["python","wav","sound"]
 published: false
 ---
 
 ## はじめに
 
 なにか音を鳴らすプログラムを組みたくなる時があります。以下ではJupyter Notebook (Google Colab)上で音を鳴らすサンプルです。
+
+ソースコードは以下においてあります。
+
+[kaityo256/python_play_sound](https://github.com/kaityo256/python_play_sound)
+
+Google Colabで開いてそのまま試すこともできます。
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/kaityo256/python_play_sound/blob/main/play_mml.ipynb)
 
 ## 音の鳴らし方
 
