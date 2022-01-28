@@ -23,6 +23,9 @@ Google Colabで開いてそのまま試すこともできます。
 音を鳴らすには、波形データをNumPy配列で作って`IPython.display.Audio`に突っ込むのが簡単です。例えばサンプリングレート44.1kHz、長さ1秒で、基準となるラの音(440Hz)を鳴らすには、以下のようなコードになります。
 
 ```py
+import numpy as np
+import IPython
+
 rate = 48000
 duration = 1.0
 t = np.linspace(0., duration, int(rate*duration))
