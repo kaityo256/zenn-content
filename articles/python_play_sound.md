@@ -31,7 +31,7 @@ IPython.display.Audio(x, rate=rate, autoplay=True)
 後のために、テンポから４分音符の長さを求めて、その長さだけ演奏するようにしましょう。4分音符の音の長さはBPM (Beat Per Minuts)から決まります。BPMは1分あたりの4分音符の数です。なのでBPM=60なら4分音符は1秒、120なら0.5です。ここではBPM=120、つまり4分音符の長さは0.5秒としましょう。
 
 ```py
-rate =48000
+rate = 48000
 BPM = 120
 qn_duration = 60.0/BPM
 t = np.linspace(0., qn_duration, int(rate*qn_duration))
@@ -83,7 +83,7 @@ for i, s in enumerate(notes):
 
 ```py
 def play_mml(mml):
-    rate =48000
+    rate = 48000
     BPM = 120
     qn_duration = 60.0/BPM
     t = np.linspace(0.0, qn_duration, int(rate*qn_duration))
@@ -161,7 +161,7 @@ Image.fromarray(data)
 ピアノロールなら音を複数同時に鳴らす表現が可能なので、既存のデータにMMLを追加する関数を作りましょう。
 
 ```py
-def mml2data_append(data,mml):
+def mml2data_append(data, mml):
     for i, s in enumerate(list(mml)):
         if s == "R":
             continue
