@@ -16,7 +16,7 @@ published: true
 
 Google Colabで開いてそのまま試すこともできます。
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/kaityo256/https://raw.githubusercontent.com/kaityo256/zenn-content/main/articles/python_play_sound/blob/main/play_mml.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/kaityo256/python_play_sound/blob/main/play_mml.ipynb)
 
 ## 音の鳴らし方
 
