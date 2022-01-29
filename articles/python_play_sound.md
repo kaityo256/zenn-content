@@ -20,7 +20,7 @@ Google Colabで開いてそのまま試すこともできます。
 
 ## 音の鳴らし方
 
-音を鳴らすには、波形データをNumPy配列で作って`IPython.display.Audio`に突っ込むのが簡単です。例えばサンプリングレート44.1kHz、長さ1秒で、基準となるラの音(440Hz)を鳴らすには、以下のようなコードになります。
+音を鳴らすには、波形データをNumPy配列で作って`IPython.display.Audio`に突っ込むのが簡単です。例えばサンプリングレート48kHz、長さ1秒で、基準となるラの音(440Hz)を鳴らすには、以下のようなコードになります。
 
 ```py
 import numpy as np
@@ -39,7 +39,7 @@ IPython.display.Audio(x, rate=rate, autoplay=True)
 
 ![実行画面](https://raw.githubusercontent.com/kaityo256/zenn-content/main/articles/python_play_sound/playsound.png)
 
-後のために、テンポから４分音符の長さを求めて、その長さだけ演奏するようにしましょう。4分音符の音の長さはBPM (Beat Per Minuts)から決まります。BPMは1分あたりの4分音符の数です。なのでBPM=60なら4分音符は1秒、120なら0.5です。ここではBPM=120、つまり4分音符の長さは0.5秒としましょう。
+後のために、テンポから４分音符の長さを求めて、その長さだけ演奏するようにしましょう。4分音符の音の長さはBPM (Beat Per Minutes)から決まります。BPMは1分あたりの4分音符の数です。なのでBPM=60なら4分音符は1秒、120なら0.5です。ここではBPM=120、つまり4分音符の長さは0.5秒としましょう。
 
 ```py
 rate = 48000
