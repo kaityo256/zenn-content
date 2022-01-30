@@ -3,7 +3,7 @@ title: "三種類の音律を聴き比べる"
 emoji: "🤖"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["Python","music"]
-published: false
+published: true
 ---
 
 ## はじめに
@@ -26,7 +26,7 @@ Google Colabで開いてそのまま試すこともできます。
 
 ピタゴラス音律は、「2:3」の比にこだわった音律です。音は、周波数が整数比だときれいに響きます。そこで、周波数が二倍の音を「1オクターブ上の音」と呼びましょう。逆に周波数を半分にすると1オクターブ下がります。この1オクターブを8個の音に分け、「ドレミファソラシド」と名前をつけます。以下、「ドレミファソラシド」をCDEFGABCで表現します。
 
-![ピタゴラス音律](pythagorean_tuning/pythagorean.png)
+![ピタゴラス音律](https://raw.githubusercontent.com/kaityo256/zenn-content/main/articles/pythagorean_tuning/pythagorean.png)
 
 まず、ド(C)を基準にしましょう。この周波数を3/2倍した音を「ソ(G)」と呼びます。ソはドから4つ全音上げた音です(完全５度と呼びます)。
 
@@ -78,7 +78,7 @@ C: 2
 2. 次にソ(G)を基準として、「ソシレ(GBD)」が4:5:6となるように周波数比を決めます。
 3. 最後はド(C)を一番上の和音として「ファラド(FAC)」が4:5:6となるように周波数比を決めます。
 
-![純正率](pythagorean_tuning/just.png)
+![純正率](https://raw.githubusercontent.com/kaityo256/zenn-content/main/articles/pythagorean_tuning/just.png)
 
 こうして、全ての音が決めることができます。コードに落とすとこんな感じになるでしょう。
 
@@ -121,7 +121,7 @@ C: 2
 
 ピタゴラス音律が2:3、純正律が3:4:5という整数比にこだわって作った音であるのに対して、1オクターブを単純に対数スケールで12等分するのが平均律です。どの和音もかならずうなりが出てしまうというデメリットはありますが、連続する音の比が全て等しくなるので転調が容易になるというメリットもあります。平均率では、1オクターブを対数スケールで12等分するので、全音上がる時には周波数が$2^{2/12}$倍、半音上がる場合は$2^{1/12}$倍になります。
 
-![平均率](pythagorean_tuning/equal.png)
+![平均率](https://raw.githubusercontent.com/kaityo256/zenn-content/main/articles/pythagorean_tuning/equal.png)
 
 今回は全音だけ扱うので、コードに落とすとこんな感じでしょうか。
 
