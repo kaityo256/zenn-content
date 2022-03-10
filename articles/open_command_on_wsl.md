@@ -60,7 +60,7 @@ open ../hoge.pdf
 ということを愚痴ったら、「[cmd.exeを使うのはどうか？](https://www.iplab.cs.tsukuba.ac.jp/~takakura/blog/20200715/)」という方法を[教えていただいた](https://twitter.com/djed736/status/1501355520749293571)。
 
 ```sh
-cmd.exec /c start filename
+cmd.exe /c start filename
 ```
 
 として実行することで、ファイルを開くことができる。ただし、wslpathを使って、WSLのパスをWindows側に変換してやる必要がある。そこで、シェルの関数にして
