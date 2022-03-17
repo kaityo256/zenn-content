@@ -94,7 +94,7 @@ Y &=& x \displaystyle \frac{dy}{dx} -y
 \qquad
 \left(
 \begin{array}{ccc}
-x &=& - \displaystyle\frac{dY}{dX}\\
+x &=&  \displaystyle\frac{dY}{dX}\\
 y &=& X \displaystyle \frac{dY}{dX} -Y
 \end{array}
 \right.
