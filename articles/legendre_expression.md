@@ -141,14 +141,14 @@ $$
 \left(
 \begin{array}{ccc}
 X &=& \displaystyle\frac{dy}{dx}\\
-Y &=& y- x \displaystyle \frac{dy}{dx}
+Y &=& x \displaystyle \frac{dy}{dx} - y
 \end{array}
 \right.
 \qquad
 \left(
 \begin{array}{ccc}
 x &=& \displaystyle\frac{dY}{dX}\\
-y &=& Y- X \displaystyle \frac{dY}{dX}
+y &=& X \displaystyle \frac{dY}{dX} - Y
 \end{array}
 \right.
 $$
