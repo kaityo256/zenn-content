@@ -3,7 +3,7 @@ title: "WSLからWindows側にショートカットファイルを作る"
 emoji: "🤖"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["wsl","zsh"]
-published: false
+published: true
 ---
 
 ## TL;DR
