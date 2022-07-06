@@ -3,7 +3,7 @@ title: "括弧で34087重に囲んだ関数を食わせるとg++が死ぬ"
 emoji: "🤖"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["cpp","gcc","llvm","intel"]
-published: false
+published: true
 ---
 
 ## TL;DR
