@@ -12,7 +12,7 @@ published: true
 
 ## 問題設定
 
-![setup.png](/images/bolzmann_machine/setup.png)
+![setup.png](/images/boltzmann_machine/setup.png)
 
 とある大学に通うDaveは、お昼はいつも学食の前のテラスでお弁当を食べます。そして、何の気なしに学食を眺めていると、同じクラスのAliceとBobが学食をよく利用していることに気が付きました。しかし、どうもAliceとBobが同時に現れる確率はかなり低いようです。AliceやBobがお互いに避けているのかと思ってちょっと聞いてみましたが、お互い名前しか知らないようで、特に気にしてないそうです。いったい何が起きているのでしょうか？
 
@@ -29,7 +29,7 @@ Daveは長いこと(239日間！)二人を観察し、AliceとBobが学食に来
 
 実は学食を利用していないDaveは知りませんでしたが、この学食は頻繁にカレーフェアを実施しています。Aliceは学食をよく利用していますが、カレーの匂いが苦手なので、カレーフェアの日は学食を利用しません。Bobは普段はあまり学食に来ませんが、カレーが大好きなので、カレーフェアの日は学食を利用する確率が高くなります。
 
-![abc.png](/images/bolzmann_machine/abc.png)
+![abc.png](/images/boltzmann_machine/abc.png)
 
 カレーフェア(Curry Fair)をCとして、その開催日をo、開催していない日をxとすると、先ほどの内訳はこうなっていました。
 
@@ -64,7 +64,7 @@ Daveから見て、AliceやBobが来ているかどうかはわかりますが�
 
 Aliceはカレーフェアが嫌いで、Bobはカレーフェアが好きなので、そこに何か関係がありそうです。AとC、BとCをそれぞれ線で結びましょう。しかし、AliceとBobはお互いに意識していませんので、そこは線で結びません。こうして、以下のような図ができました。
 
-![model.png](/images/bolzmann_machine/model.png)
+![model.png](/images/boltzmann_machine/model.png)
 
 ここで、AliceとBobはDaveから見えるので「可視層(visible layer)」、カレーフェアはDaveから見えないので「隠れ層(hidden layer)」と呼びます。
 
@@ -87,7 +87,7 @@ Aliceの出現確率にBobは無関係なので、まずはAliceとカレーフ�
 
 カレーフェアとAliceの関係を表す重み$W_{ac}$は、「カレーフェアが開催されており、かつAliceが学食にくる可能性の高さ」を表すパラメータなので、カレーフェアが開催していない時には関係ありません。そこで、新たに「他に何も条件がない場合にAliceが学食に来る可能性の高さ」を表すパラメータを導入しましょう。これを **バイアス(bias)** と呼び、$b_a$で表します。$b_a>0$なら、何もない時にAliceが学食に出現する確率が高いことを、$b_a<0$なら、出現する確率が低いことを表します。全く同様にして、Bobの学食の出現しやすさを表すバイアス$b_b$、カレーフェアの開催確率の高さを表すバイアス$b_c$を定義します。
 
-![weights.png](/images/bolzmann_machine/weights.png)
+![weights.png](/images/boltzmann_machine/weights.png)
 
 以上で、このモデルを表現するための全ての変数とパラメータが準備できました。
 
@@ -383,11 +383,11 @@ $$
 
 です。これは統計力学における分配関数にほかなりません。
 
-このように、状態を表す変数の値が0か1の二値であり、ある変数の状態の実現確率がボルツマン重みで記述されるようなモデルをボルツマンマシン(Bolzmann machine)と呼びます。ボルツマンマシンは、パラメータが決まってしまえば、任意の変数の状態の同時確率や条件付き確率を計算することができるマシンです。
+このように、状態を表す変数の値が0か1の二値であり、ある変数の状態の実現確率がボルツマン重みで記述されるようなモデルをボルツマンマシン(boltzmann machine)と呼びます。ボルツマンマシンは、パラメータが決まってしまえば、任意の変数の状態の同時確率や条件付き確率を計算することができるマシンです。
 
-![calc.png](/images/bolzmann_machine/calc.png)
+![calc.png](/images/boltzmann_machine/calc.png)
 
-特に、スピンを2つのグループにわけることができて、同じグループ内に相互作用が無い場合を **制限ボルツマンマシン(restricted Bolzmann machine, RBM)** と呼びます。今回のケースはRBMになっています。RBMは表現能力が高いまま、学習が容易になるという特徴を持っており、広く使われています。
+特に、スピンを2つのグループにわけることができて、同じグループ内に相互作用が無い場合を **制限ボルツマンマシン(restricted boltzmann machine, RBM)** と呼びます。今回のケースはRBMになっています。RBMは表現能力が高いまま、学習が容易になるという特徴を持っており、広く使われています。
 
 例えば、Aliceが学食に来て$(v_a=1)$、Bobが学食に来ていない$v_b=0$、という条件において、カレーフェアが開催している($h_c=1$)という確率を計算してみましょう。
 
@@ -454,5 +454,5 @@ $$
 
 ## 参考
 
-* [Restricted Boltzmann Machines (RBM) - A friendly introduction](https://www.youtube.com/watch?v=Fkw0_aAtwIw) Bolzmann Mechineの説明動画で一番わかりやすかったもの。上記の例もこの動画を大いに参考にして作りました。
+* [Restricted Boltzmann Machines (RBM) - A friendly introduction](https://www.youtube.com/watch?v=Fkw0_aAtwIw) boltzmann Mechineの説明動画で一番わかりやすかったもの。上記の例もこの動画を大いに参考にして作りました。
 * [Ali Ghodsi, Lec [7], Deep Learning , Restricted Boltzmann Machines (RBMs)](https://www.youtube.com/watch?v=FJ0z3Ubagt4) Ali GhodsiによるWaterloo大学での講義動画。ボルツマンマシンが明快に説明されています。こういう動画が気軽に見られるとは、良い時代になったものです。
