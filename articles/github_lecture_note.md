@@ -3,7 +3,7 @@ title: "GitHubで講義ノートを書く"
 emoji: "🤖"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: [GitHub, Markdown, Pandoc]
-published: false
+published: true
 ---
 
 ## はじめに
