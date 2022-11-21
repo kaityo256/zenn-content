@@ -24,10 +24,12 @@ published: false
 
 * 講義ノートをMarkdown形式でVS Code上で書く
 * MarkdownファイルをPandocでHTMLに変換してウェブ閲覧用とする
-* MarkdownファイルをPandocでPDFに変換して配布用とする
+* 課題はMarkdownファイルをPandocでPDFに変換して配布用とする
 * 公開先はGitHubとする
 
 という運用に落ち着きました。以下、それぞれの説明です。
+
+## 運用の詳細
 
 ### 講義ノートをMarkdownで書く
 
@@ -128,3 +130,115 @@ Markdownにはなかった`[Up][Repository]`のリンクが貼られ、もとも
 ![responsive](/images/github_lecture_note/responsive.png)
 
 個人的に、**講義ノートがスマホで閲覧できる** というのはかなり重要だと考えています。 多くの学生がスマホでの情報閲覧に慣れており、スマホで講義ノートが見られると読んでくれるというのもありますし、自分でも時間がある時にスマホで見返すことでタイポを見つけたりもできます。
+
+各回の講義ノートはこれでOKですが、トップレベルの`README.md`の変換はもうひと工夫必要です。トップレベルの`README.md`から例えば「条件分岐と繰り返し処理」の講義ノートへのリンクは`basic/README.md`になっているため、これを`basic/index.html`に変える必要があります。
+
+まぁ、sedを使って`README.md`を`index.html`に変えるだけですが。
+
+```makefile
+index.md: README.md
+        sed 's/README.md/index.html/' $< > $@
+
+index.html: index.md
+        pandoc -s $< -o $@ $(PANDOC_HTMLOPT) --shift-heading-level-by=-1
+        rm -f index.md
+```
+
+あとは変換すべきファイルを`ls`で探すコードをMakefileに書いてやればおしまいです。最終的にMakefileはこんな感じになります。
+
+```makefile
+INDEX=$(shell ls */README.md | sed 's/README.md/index.html/')
+PANDOC_HTMLOPT=--mathjax -t html --template=template
+TARGET=$(INDEX)
+
+pdf: $(ASSIGNMENT)
+index.md: README.md
+        sed 's/README.md/index.html/' $< > $@
+
+index.html: index.md
+        pandoc -s $< -o $@ $(PANDOC_HTMLOPT) --shift-heading-level-by=-1
+        rm -f index.md
+
+%/index.md: %/README.md
+        sed '2a [[Up]](../index.html)' $< > $@
+        sed -i '3a [[Repository]](https://github.com/kaityo256/python_zero)\n' $@
+
+%/index.html: %/index.md
+        pandoc -s $< -o $@ $(PANDOC_HTMLOPT) --shift-heading-level-by=-1
+```
+
+これで`make`とすると、必要なHTMLファイルがすべて作られることになります。
+
+### 課題はMarkdownファイルをPandocでPDFに変換して配布用とする
+
+講義では、学生に「これを見ながら作業せよ」という課題を配布しています。例えば「ゼロから学ぶPython」では、プログラムを写経(一部穴埋め)して、動作を確認してく課題を出しています。
+
+これもHTMLのままでも良いのですが、印刷してもってくる学生が多いこと、LMSで配布するのにHTMLのままではやりづらいことから、PDFに変換しています。
+
+「ゼロから学ぶPython」では、講義ノートの前半が解説、後半が課題になっています。
+
+そこで、もとのMarkdownファイルから課題だけを切り出したファイルを作り、そこからPandocでPDFにします。
+
+`README.md`から、課題だけを切り出した`assignment.md`を作るのには、やはりsedを使います。
+
+```makefile
+%/assignment.md: %/README.md
+        sed -n '/^##\s.*課題/,$$p' $< > $@
+```
+
+こうして作った`assignment.md`を、以下のようにしてPDFにします。
+
+```makefile
+PANDOC_TEXOPT=--highlight-style tango --pdf-engine=lualatex -V documentclass=ltjarticle -V geometry:margin=1in -H ../mytemplate.tex
+
+%/assignment.pdf: %/assignment.md
+        cd $(dir $@);pandoc $(notdir $<) -s -o $(notdir $@) $(PANDOC_TEXOPT)
+```
+
+オプションは適当にいじって望むPDFが出るようにしましたが、コードのところだけ背景を灰色にするため、Pandocが吐くLaTeX環境を上書きするのに、LaTeXテンプレートを利用しています。`mytemplate.tex`の中身はこんな感じです。
+
+```tex
+\renewenvironment{Shaded}{\begin{snugshade} \large }{\end{snugshade}}
+\definecolor{shadecolor}{RGB}{235,235,235}
+```
+
+これで、コードの背景が灰色になります。こんな感じです。
+
+![code](/images/github_lecture_note/code.png)
+
+あとは、サブディレクトリから課題を含む`README.md`ファイルを探して、それらすべてから`assignment.pdf`を作るようにMakefileを書けばOKです。
+
+```makefile
+PANDOC_TEXOPT=--highlight-style tango --pdf-engine=lualatex -V documentclass=ltjarticle -V geometry:margin=1in -H ../mytemplate.tex
+ASSIGNMENT=$(shell grep --exclude=answer/*.md -l ^\#.*課題 */README.md | sed 's/README.md/assignment.pdf/')
+
+pdf: $(ASSIGNMENT)
+
+%/assignment.md: %/README.md
+        sed -n '/^##\s.*課題/,$$p' $< > $@
+
+%/assignment.pdf: %/assignment.md
+        cd $(dir $@);pandoc $(notdir $<) -s -o $(notdir $@) $(PANDOC_TEXOPT)
+```
+
+これにより、`make pdf`とすれば、各講義回のディレクトリに`assignment.pdf`が作成されます。
+
+### 公開先はGitHubとする
+
+講義ノートを大学のサーバに置くのは問題です。著者が転出、ないし退職したら、多くの場合そのサーバも消えてしまうからです。
+
+もちろんGitHubも将来どうなるかわかりませんが、少なくとも大学のサーバよりは寿命が長そうだし、消えたら困る講義ノートがあったらとりあえずforkすれば良い、というのはとても楽です。
+
+また、これはみなさん良くご存知だと思いますが、**一般に大学の講義ノートは誤植だらけです** 。特に版を重ねていない新しい教科書は、誤植があることを前提に読む必要があります。
+
+さて、教科書を読んでいて誤植を見つけた時、著者を調べ、著者の所属を調べ、著者のメールアドレスを調べ、そこにメールをする、というのは極めてハードルが高い作業です。
+
+一方、GitHubに講義ノートが公開されていれば、明らかな誤植を見つけた時はさくっと直してプルリクを出せます。また、誤植か迷った時はissueに疑問を書けばOKです。メールだと(特に相手が偉い先生だったりした時に)「これ、送って良いのかな？」と腰が引けてしまいますが、講義ノートがGitHubで公開されていれば、とりあえずプルリクやissueは普通に受け付けてくれそうな気がします。そういう意味でもGitHubでの公開は良いと思います。
+
+また、ライセンスが明示されているのも自分の講義に使いやすいかな、と思います。例えば市販の教科書を自分の講義で採用した時、その教科書の一部の解説をアップロードしたり、改変した内容をアップロードしたりする時には、著作権を侵害していないか気になります。
+
+一方、僕は講義ノートをCC-BYのライセンスで公開しているため、ライセンスの範囲内で安心して好き勝手できます。ちなみに講義スライドのパワーポイントファイルもリポジトリにあるため、例えば講義名や教員の名前だけ変えてそのまま講義に使えます(どこかに適切なクレジットさえあれば)。
+
+## まとめ
+
+GitHubで講義ノートを書くノウハウやメリットをまとめて見ました。僕の講義ノートそのものだけでなく、講義ノートを書くノウハウが誰かの参考になれば幸いです。
