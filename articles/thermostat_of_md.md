@@ -232,6 +232,6 @@ $$
 * [分子動力学法における熱浴の保存量](https://qiita.com/kaityo256/items/dc2ab16af09f56767a6e) Nose-Hoover法や多変数熱浴における数値積分の保存量について
 
 [^vs]: L. V. Woodcock, Chem. Phys. Lett., vol. 10, p. 257 (1971).
-[^berendsen]: H. J. C. Berendsen et al., J. Chem. Phys., 81, 3684 (1984).
-[^nosehoover]:  S. Nose,´ Mol. Phys. 52 255 (1984)., W. G. Hoover, Phys. Rev. A, 31, 1695 (1985).
-[^langevin]: W. G. Hoover, A. J. C. Ladd, and B. Moran, Phys. Rev. Lett. 48, 1818 (1982).
+[^berendsen]: H. J. C. Berendsen et al., J. Chem. Phys., vol. 81,p. 3684 (1984).
+[^nosehoover]: S. Nosé, Mol. Phys. vol. 52 p. 255 (1984)., W. G. Hoover, Phys. Rev. A, vol. 31, p. 1695 (1985).
+[^langevin]: W. G. Hoover, A. J. C. Ladd, and B. Moran, Phys. Rev. Lett. vol. 48, p. 1818 (1982).
