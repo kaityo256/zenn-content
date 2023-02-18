@@ -2,7 +2,7 @@
 title: "Postscript言語を触ってみる"
 emoji: "🤖"
 type: "tech" # tech: 技術記事 / idea: アイデア
-topics: ["PostScript", "GhostScript","Python"]
+topics: ["PostScript", "Ghostscript","Python"]
 published: false
 ---
 
@@ -821,6 +821,8 @@ save_eps(atoms, "sample2.eps")
 
 ## まとめ
 
-PostScript言語を紹介してみました。Ghostscriptを使ってインタラクティブに画像を描画するのは結構楽しいです。また、コードからEPSを吐けるとたまに便利だったりします。PostScriptの知識があると、例えばPDFの中身も理解しやすかったりします。慣れれば速度場も三次元プロットも色つけたりも簡単にできます。
+PostScript言語を紹介してみました。Ghostscriptを使ってインタラクティブに画像を描画するのは結構楽しいですし、スタックマシンでマクロを駆使しながらプログラミングをするのもパズルっぽくて面白いです。
+
+また、コードからEPSを吐けるとたまに便利だったりしますPostScriptの知識があると、例えばPDFの中身も理解しやすかったりします。慣れれば速度場も三次元プロットも色つけたりも簡単にできます。
 
 この「失われつつある知識」が、誰かの参考になれば幸いです。
