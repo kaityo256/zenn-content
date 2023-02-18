@@ -475,3 +475,115 @@ GS>(Hello World) show
 ```
 
 ![hello world](/images/ghostscript_sample/helloworld.png)
+
+### 画面操作系
+
+#### `translate`
+
+`x y translate`の形で使い、原点を(x,y)方向にずらします。現在の原点をずらすため、二度実行すると二回ずれます。
+
+#### `rotate`
+
+`angle rotate`の形で使います。現在の座標軸を`angle`度だけ回転させます。
+
+#### `scale`
+
+`sx sy scale`の形で使います。現在の座標軸をx方向にsx倍、y方向にsy倍だけ拡大/縮小します。
+
+#### `gsave`,`grestore`
+
+`gsave`で現在の画面の状態を保存し、`grestore`で復帰します。`translate`や`rotate`などの情報を保存、復帰できます。EPSファイルなどで座標をいじっている時、正しく元に戻さないとその後のLaTeXの表示がおかしくなる時があります。ファイルの最初に`gsave`、最後に`grestore`をつけるのが一般的です。
+
+### マクロ定義
+
+PostScriptでは、マクロ定義のようなことができ、変数のように使えます、
+
+マクロの定義の文法は
+
+```txt
+/name 定義 def
+```
+
+です。例えば
+
+```txt
+/R 50 def
+```
+
+とすると、以後は`50`の代わりに`R`と書くことができます。マクロを定義する時には`/`が必要ですが、参照する時には`/`を外します。
+
+また、複数の文字列をマクロとして定義したければ中括弧で囲みます。以下は原点に半径50の円を書くマクロです。
+
+```txt
+/C {0 0 50 0 360 arc stroke} def
+```
+
+この後、
+
+```txt
+C
+```
+
+と書くと、
+
+```txt
+0 0 50 0 360 arc stroke
+```
+
+と書いたのと同じことになります。
+
+マクロは「入れ子」にできます。例えば、マクロ定義にマクロを使うことができます。
+
+```txt
+/R 50 def
+/C {0 0 R 0 360 arc stroke} def
+```
+
+また、マクロ定義時に、そのマクロが定義されている必要はありません。
+
+```txt
+/C {0 0 R 0 360 arc stroke} def 
+/R 50 def
+```
+
+マクロは再定義(上書き)できます。なので、こんなことができます。
+
+```sh
+GS>/C {0 0 R 0 360 arc stroke} def
+GS>/R 50 def C
+GS>/R 100 def C
+GS>/R 150 def C
+GS>
+```
+
+![manyarc](/images/ghostscript_sample/manyarc.png)
+
+これは、半径を50,100,150と変えながら表示したものです。
+
+### 繰り返し
+
+PostScriptにもfor文やif文があります。神代のプログラマは、PostScriptに複雑なコードを書いて、例えばマンデルブロ集合だのローレンツアトラクタだのをプリンタに計算させて出力する、みたいなことをして遊んでいたようですが、普通はEPSを別のプログラミング言語から出力するため、制御構造はホスト側のプログラミング言語でなんとかするでしょう。
+
+ここでは、for文の例を挙げておくにとどめます。for文の文法は`start step end {proc} for`です。Cで言うと
+
+```c
+for (i = start; i < end; i+= step){
+  proc;
+}
+```
+
+に対応します。例えばこんなコードを書いてみましょう。
+
+```txt
+/M {moveto} def
+/L {lineto} def
+100 100 translate
+0 5 50 {0 0 3 2 roll 0 360 arc stroke} for
+50 0 M 0 50 L -50 0 L 0 -50 L closepath stroke
+```
+
+for文で、半径を0から50まで5ずつ増やしながら円を描いています。実行結果はこんな感じになります。
+
+![for](/images/ghostscript_sample/for.png)
+
+正方形が歪んで見えるというアレです。
