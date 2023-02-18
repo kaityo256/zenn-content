@@ -2,7 +2,7 @@
 title: "Postscript言語を触ってみる"
 emoji: "🤖"
 type: "tech" # tech: 技術記事 / idea: アイデア
-topics: []
+topics: ["PostScript", "GhostScript","Python"]
 published: false
 ---
 
@@ -731,7 +731,6 @@ def save_eps(spins, filename):
 /mydict 120 dict def
 mydict begin
 gsave
-gsave
 /M {moveto} def /L {lineto} def /S {stroke} def
 /R {25 0 translate} def
 /U {10 0 M 10 20 L S 5 15 M 10 20 L 15 15 L S R} def
@@ -759,3 +758,69 @@ save_eps(spins, "sample1.eps")
 実行すると`sample1.eps`ができます。こんな感じです。
 
 ![spins](/images/ghostscript_sample/spins.png)
+
+#### 粒子系
+
+分子動力学シミュレーションをしていて、粒子の位置と速度ベクトルの向きを描画したい、なんてこともあるでしょう。
+
+```py
+import random
+
+
+class Atom:
+    def __init__(self, x, y, theta):
+        self.x = x
+        self.y = y
+        self.theta = theta
+
+
+def save_eps(atoms, filename):
+    with open(filename, "w") as f:
+        f.write("""
+%!PS-Adobe-2.0 EPSF-2.0
+%%BoundingBox: 0 0 200 200
+%%DocumentFonts: Helvetica
+%%Orientation: Portrait
+%%Pages: 1
+%%EndComments
+/mydict 120 dict def
+mydict begin
+gsave
+/C {0 0 10 0 360 arc stroke} def
+/V {rotate 0 0 moveto 0 10 lineto stroke} def
+/P {gsave translate C V grestore} def
+""")
+        for a in atoms:
+            f.write(f"{a.theta} {a.x} {a.y} P\n")
+        f.write("""
+end
+grestore
+showpage
+""")
+
+
+atoms = []
+
+for _ in range(50):
+    x = random.random() * 200
+    y = random.random() * 200
+    theta = random.random() * 360
+    atoms.append(Atom(x, y, theta))
+save_eps(atoms, "sample2.eps")
+```
+
+実行すると`sample2.eps`ができます。こんな感じです。
+
+![atoms](/images/ghostscript_sample/atoms.png)
+
+ベクタ画像なので、拡大してもきれいです。
+
+![atoms_enlarge](/images/ghostscript_sample/atoms_enlarge.png)
+
+イベントドリブン型のMDを書いていた時、こうして拡大して衝突判定のデバッグをしていました。
+
+## まとめ
+
+PostScript言語を紹介してみました。Ghostscriptを使ってインタラクティブに画像を描画するのは結構楽しいです。また、コードからEPSを吐けるとたまに便利だったりします。PostScriptの知識があると、例えばPDFの中身も理解しやすかったりします。慣れれば速度場も三次元プロットも色つけたりも簡単にできます。
+
+この「失われつつある知識」が、誰かの参考になれば幸いです。
