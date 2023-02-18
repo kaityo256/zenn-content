@@ -3,7 +3,7 @@ title: "Postscript言語を触ってみる"
 emoji: "🤖"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["PostScript", "Ghostscript","Python"]
-published: false
+published: true
 ---
 
 ## はじめに
