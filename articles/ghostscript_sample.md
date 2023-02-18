@@ -48,7 +48,15 @@ GS>
 
 ![gs.png](/images/ghostscript_sample/gs.png)
 
-この`GS>`がPostScriptのREPLになっており、ここにいろいろ入力できるのですが、画面が大きいとやりづらいので、一度`quit`と入力して修了しましょう。
+この`GS>`がPostScriptのREPLになっており、ここにいろいろ入力できます。やはり最初は「Hello World!」からいきましょうか。PostScript言語では`(Hello World\n) print`と入力すると、画面に「Hello World!」と出力できます。
+
+```sh
+GS>(Hello World\n) print
+Hello World
+GS>
+```
+
+さて、PostScript言語はページ記述言語であり、図形を描画できるのが強みです。しかし、画面が大きいとやりづらいので、一度`quit`と入力して終了しましょう。
 
 ```sh
 GS>quit
@@ -194,6 +202,21 @@ GS<2>stack
 GS<2>
 ```
 
+#### `==`
+
+スタックの一番上のデータを表示してから取り除きます。主に、後に述べるマクロの表示に使います。
+
+```sh
+GS>1 2 3
+GS<3>==
+3
+GS<2>==
+2
+GS<1>==
+1
+GS>
+```
+
 #### `clear`
 
 スタックの中身を全て消去します。
@@ -306,6 +329,149 @@ GS>
 
 ### 描画命令
 
-PostScriptには、他の多くの描画系の言語と同様に「カレントポイント」という概念があります。カレントポイントは、今の筆の位置であり、「どこそこに線をひけ」と命令すると、カレントポイントからその場所に線がひかれます。
+PostScriptには、他の多くの処理系における描画系のコマンドと同様にカレントポイントという概念があり、描画命令はカレントポイントを基準に実行されます。以下、よく使う描画関連の命令をいくつか紹介します。
 
-また、線を描画したあとは、カレントポイントがそこに移動します。
+#### `moveto`
+
+`x y moveto`の形で使い、カレントポイントを(x,y)に移動します。次の直線描画と一緒に使うとわかりやすいと思います。
+
+#### `lineto`
+
+`x y lineto`の形で使い、カレントポイントから(x, y)まで直線のパスを生成します。また、カレントポイントが(x,y)にに移動します。
+
+#### `stroke`
+
+`lineto`はパスを生成するだけで、そのパスに実体を与えるのは`stroke`です。`stroke`により、現在の線、線幅、色でパスを描画します。
+
+以上から、(0, 0)から(100, 100)に直線をひきたければ
+
+```txt
+0 0 moveto
+100 100 lineto
+stroke
+```
+
+を実行する必要があります。わかりやすさのために改行していますが、一行で指定してもかまいません。
+
+```sh
+GS>0 0 moveto 100 100 lineto stroke
+GS>
+```
+
+#### `showpage`
+
+現在までに描画されたデータをデバイス(主にプリンタ)に送ります。GhostscriptのREPLを使ってる時には、画面のクリアに使えます。以下、何か描画するたびに`showpage`とすると画面がクリアされます。
+
+#### `arc`
+
+`cx cy r angle1 angle2 arc`の形で使います。中心が(cx, cy)、半径がr、角度がangle1からangle2まで反時計周りに円を描画します。
+
+```sh
+GS>100 100 50 0 360 arc stroke
+GS>
+```
+
+![arc](/images/ghostscript_sample/arc.png)
+
+描画の開始点は「下」なので、0から270度まで描画するとこうなります。
+
+```sh
+GS>100 100 50 0 270 arc stroke
+GS>
+```
+
+![arc_3_4](/images/ghostscript_sample/arc_3_4.png)
+
+描画が真下からスタートして反時計周りに3/4円を描いていることがわかります。
+
+時計回りバージョンの`arcn`というコマンドもあります。
+
+#### `closepath`
+
+いま描画中のパスの始点と終点をつなげます。例えば、(50,50)から(150,50)に直線を引き、(50,150)に直線を引いてから、`closepath`すると直角三角形を描画できます。
+
+```sh
+GS>50 50 moveto
+GS>150 50 lineto
+GS>50 150 lineto
+GS>closepath
+GS>stroke
+GS>
+```
+
+![triangle](/images/ghostscript_sample/triangle.png)
+
+このように、直線は連続して描画できます。
+
+#### `fill`
+
+閉じたパスの中身を塗りつぶします。`closepath`の後に使います。
+
+```sh
+GS>50 50 moveto
+GS>150 50 lineto
+GS>50 150 lineto
+GS>closepath
+GS>fill
+GS>
+```
+
+![triangle_fill](/images/ghostscript_sample/triangle_fill.png)
+
+円を塗りつぶすこともできます。
+
+```sh
+GS>100 100 50 0 360 arc fill
+GS>
+```
+
+![arc_fill](/images/ghostscript_sample/arc_fill.png)
+
+#### `setlinewidth`
+
+`w setlinewidth`の形で使い、線幅を`w`にします。
+
+```sh
+GS>5 setlinewidth
+GS>0 0 moveto 100 100 lineto stroke
+GS>
+```
+
+![line_w](/images/ghostscript_sample/line_w.png)
+
+#### `setrgbcolor`
+
+`r g b setrgbcolor`の形で使い、色を指定します。三原色の輝度を0から1までで指定できます。小数による指定も可能です。
+
+```sh
+GS>1 0 0 setrgbcolor
+GS>100 100 50 0 360 arc fill
+GS>
+```
+
+![arc_red](/images/ghostscript_sample/arc_red.png)
+
+```sh
+GS>0.8 0.9 1.0 setrgbcolor
+GS>100 100 50 0 360 arc fill
+GS>
+```
+
+![arc_color](/images/ghostscript_sample/arc_color.png)
+
+#### `findfont`,`scalefont`,`setfont`
+
+`fontname findfont fontsize scalefont setfont`の形で使い、カレントフォントを指定します。例えば`/Helvetica findfont 14 scalefont setfont`により、Helveticaの14ポイントのフォントを指定できます。
+
+#### `show`
+
+カレントポイントにスタックの一番上に積まれた文字列を表示します。文字列をスタックに積むには`()`で囲む必要があります。`(string) show`の形で使うことが多いです。
+
+```sh
+GS>/Helvetica findfont 14 scalefont setfont
+Loading NimbusSans-Regular font from /usr/share/ghostscript/9.50/Resource/Font/NimbusSans-Regular... 4331112 2813464 3833824 2542916 1 done.
+GS>50 100 moveto
+GS>(Hello World) show
+```
+
+![hello world](/images/ghostscript_sample/helloworld.png)
