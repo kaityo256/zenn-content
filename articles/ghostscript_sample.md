@@ -562,17 +562,55 @@ GS>
 
 ### 繰り返し
 
-PostScriptにもfor文やif文があります。神代のプログラマは、PostScriptに複雑なコードを書いて、例えばマンデルブロ集合だのローレンツアトラクタだのをプリンタに計算させて出力する、みたいなことをして遊んでいたようですが、普通はEPSを別のプログラミング言語から出力するため、制御構造はホスト側のプログラミング言語でなんとかするでしょう。
+PostScriptにもfor文やif文があります。神代のプログラマは、PostScriptに複雑なコードを書いて、例えばマンデルブロ集合だのローレンツアトラクタだのをプリンタに計算させて出力する、みたいなことをして遊んでいたようですが、現在はEPSを別のプログラミング言語から出力することがほとんどであるため、制御構造はホスト側のプログラミング言語に任せ、PostScriptの高度なプログラミングは必要ないと思います。ここでは、for文の例を挙げておくにとどめます。
 
-ここでは、for文の例を挙げておくにとどめます。for文の文法は`start step end {proc} for`です。Cで言うと
+for文の文法は`start step end {proc} for`です。Cで言うと
 
 ```c
-for (i = start; i < end; i+= step){
+for (i = start; i <= end; i+= step){
   proc;
 }
 ```
 
-に対応します。例えばこんなコードを書いてみましょう。
+に対応します。終了条件に等号が含まれていることに注意してください。たとえば0から10までを表示させるには`0 1 10 {==} for`とします。
+
+```sh
+GS>0 1 10 {==} for
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+GS>
+```
+
+処理で何もしなければ、for文のループカウンタがスタックに積まれます。
+
+```sh
+GS>0 1 10 {} for stack
+10
+9
+8
+7
+6
+5
+4
+3
+2
+1
+0
+GS<11>
+```
+
+PostScriptはスタックマシンなので、ループカウンタがスタックの一番上に積まれることを利用して処理を書きます。
+
+例えばこんなコードを書いてみましょう。
 
 ```txt
 /M {moveto} def
@@ -587,3 +625,137 @@ for文で、半径を0から50まで5ずつ増やしながら円を描いてい�
 ![for](/images/ghostscript_sample/for.png)
 
 正方形が歪んで見えるというアレです。
+
+ループカウンタを半径として使うために、座標をプッシュしてから`roll`で回していますが、マクロを使った方がわかりやすいでしょうか。
+
+```txt
+/M {moveto} def
+/L {lineto} def
+100 100 translate
+0 5 50 {/R exch def 0 0 R 0 360 arc stroke} for
+50 0 M 0 50 L -50 0 L 0 -50 L closepath stroke
+```
+
+スタックの一番上に積まれたループカウンタの値を`/R`としてマクロで受け取り、それを円の描画に利用しています。
+
+## EPS
+
+### EPSヘッダ
+
+EPSはEncapsulated PostScriptの略で、もともとプリンタに送られるために作られたデータをうまく切り取って別のファイルに貼り込むために作られました。
+
+例えば、gnuplotが出力するEPSファイルを見てみましょう。以下のような内容の`test.plt`をgnuplotに食わせると、`test.eps`ができます。
+
+```txt
+set term postscript eps
+set out "test.eps"
+p x
+```
+
+作成された`test.eps`の冒頭はこうなっています。
+
+```txt
+%!PS-Adobe-2.0 EPSF-2.0
+%%Title: test.eps
+%%Creator: gnuplot 5.2 patchlevel 8
+%%CreationDate: Sat Feb 18 19:14:18 2023
+%%DocumentFonts: (atend)
+%%BoundingBox: 50 50 410 302
+%%EndComments
+%%BeginProlog
+/gnudict 256 dict def
+gnudict begin
+```
+
+PostScript言語では、`%`から行末まではコメント扱いです。EPSでは、ファイルのヘッダに`%%`を特別なコメントとして、そのコメントに付加情報をつけます。いろいろ書いてありますが、もっとも重要なのは冒頭の``BoundingBox`です。ここで、全体のどこを切り取るかを指定します。
+
+例えば、(100, 100)に半径50の円を描画しましょう。
+
+```txt
+100 100 50 0 360 arc fill
+```
+
+これをGhostScriptで実行すると円が見えます。
+
+![arc_fill](/images/ghostscript_sample/arc_fill.png)
+
+これを(100,100)から(200,200)を対角線とする長方形で切り取って画像とするEPSファイルを作ってみましょう。
+
+```txt
+%!PS-Adobe-2.0 EPSF-2.0
+%%BoundingBox: 100 100 200 200
+%%DocumentFonts: Helvetica
+%%Orientation: Landscape
+%%Pages: 1
+%%EndComments
+/mydict 120 dict def
+mydict begin
+gsave
+100 100 50 0 360 arc fill
+end
+grestore
+showpage
+```
+
+これを`test2.eps`という名前で保存し、例えば`evince`などで表示するとこうなります。
+
+![evince](/images/ghostscript_sample/evince.png)
+
+中央から1/4だけ切り取られていることがわかります。なお、OrientationをLandscapeにすると、原点が左上になるために向きが変わります。原点を左下にしたければPortraitを指定します。
+
+先程のEPSファイルには`%%BoundingBox:`の他にもいろいろ書いてありました。基本的には「おまじない」と思えばOKですが、ちょっとだけ説明します。
+
+* `%%DocumentFonts: Helvetica` フォントの指定をしています。
+* `/mydict 120 dict def` ユーザー辞書の指定です。マクロ定義はユーザの辞書に格納されますが、これが別の名前空間(たとえばLaTeXが出力するPostScript)とぶつかるとややこしいことになります(例えば次のEPSファイルが表示されなくなる)。そこで、ここで個別の辞書を定義しています。ローカル変数みたいなノリです。
+* `gsave`,`grestore` 座標などの情報を最初に保存し、最後に復旧しています。PostScriptでは座標の原点をずらしたり傾けたり拡大縮小したりするため、それが次のPostScript命令に影響を与えるのを避けるためです。
+
+### EPSファイルの出力例
+
+#### スピン系
+
+たとえばモンテカルロシミュレーションをしていて、スピン状態を可視化したくなったとします。イジングスピンを可視化するコードを書いてみましょう。
+
+```py
+import random
+
+
+def save_eps(spins, filename):
+    with open(filename, "w") as f:
+        f.write("""
+%!PS-Adobe-2.0 EPSF-2.0
+%%BoundingBox: 0 0 200 200
+%%DocumentFonts: Helvetica
+%%Orientation: Portrait
+%%Pages: 1
+%%EndComments
+/mydict 120 dict def
+mydict begin
+gsave
+gsave
+/M {moveto} def /L {lineto} def /S {stroke} def
+/R {25 0 translate} def
+/U {10 0 M 10 20 L S 5 15 M 10 20 L 15 15 L S R} def
+/D {10 0 M 10 20 L S 5 5 M 10 0 L 15 5 L S R} def
+/LF {-200 25 translate} def
+""")
+        for i in range(64):
+            if i != 0 and i % 8 == 0:
+                f.write("LF\n")
+            if spins[i] == 0:
+                f.write("U ")
+            else:
+                f.write("D ")
+        f.write("""
+end
+grestore
+showpage
+""")
+
+
+spins = [random.randint(0, 1) for _ in range(64)]
+save_eps(spins, "sample1.eps")
+```
+
+実行すると`sample1.eps`ができます。こんな感じです。
+
+![spins](/images/ghostscript_sample/spins.png)
