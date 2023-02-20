@@ -16,11 +16,11 @@ PostScript言語はページ記述言語と呼ばれる、描画命令に特化�
 
 現在では論文に図を貼り込むのはPDFが標準となり、PSやEPSファイルを直接見たり編集したりする機会はほとんどなくなりました。この、失われつつあるPostScriptの知識を後世に残すのも年寄りの役目かな、と思ってこの記事として埋葬しておきます。
 
-## GhostScriptの起動
+## Ghostscriptの起動
 
-PostScriptはプログラミング言語ですから、その言語処理系があります。それがGhostScriptです。X Window Systemが使えるLinux環境があるとそのまま使えますが、WindowsやMacの場合は、WindowsならVcXsrv、MacならXQuartzをインストールし、Dockerで適当なLinux環境を作ると良いでしょう。
+PostScriptはプログラミング言語ですから、その言語処理系があります。それがGhostscriptです。X Window Systemが使えるLinux環境があるとそのまま使えますが、WindowsやMacの場合は、WindowsならVcXsrv、MacならXQuartzをインストールし、Dockerで適当なLinux環境を作ると良いでしょう。
 
-例えば、以下を実行すればGhostScriptが使えるようになります。
+例えば、以下を実行すればGhostscriptが使えるようになります。
 
 ```sh
 git clone https://github.com/kaityo256/gs_sample.git
@@ -32,7 +32,7 @@ make run
 
 なお、Dockerが走っていることと、X Window Systemが適切な許可を持っていることが前提です。
 
-GhostScriptがインストールされている環境が手に入ったら、`gs`を入力しましょう。
+Ghostscriptがインストールされている環境が手に入ったら、`gs`を入力しましょう。
 
 ```sh
 $ gs
@@ -48,7 +48,7 @@ GS>
 
 ![gs.png](/images/ghostscript_sample/gs.png)
 
-この`GS>`がPostScriptのREPLになっており、ここにいろいろ入力できます。やはり最初は「Hello World!」からいきましょうか。PostScript言語では`(Hello World\n) print`と入力すると、画面に「Hello World!」と出力できます。
+この`GS>`がPostScriptのREPLになっており、ここにいろいろ入力できます。やはり最初は「Hello World」からいきましょうか。PostScript言語では`(Hello World\n) print`と入力すると、画面に「Hello World」と出力できます。
 
 ```sh
 GS>(Hello World\n) print
@@ -92,7 +92,7 @@ GS>
 * `100 100 lineto` カレントポイントから(100,100)に直線のパスを作成し
 * `stroke` これまでのパスを描画せよ
 
-というPostScriptの命令であり、GhostScriptはそれを解釈して線を描画した、という流れになります。
+というPostScriptの命令であり、Ghostscriptはそれを解釈して線を描画した、という流れになります。
 
 ## PostScriptの概要
 
@@ -667,7 +667,7 @@ p x
 gnudict begin
 ```
 
-PostScript言語では、`%`から行末まではコメント扱いです。EPSでは、ファイルのヘッダに`%%`を特別なコメントとして、そのコメントに付加情報をつけます。いろいろ書いてありますが、もっとも重要なのは冒頭の``BoundingBox`です。ここで、全体のどこを切り取るかを指定します。
+PostScript言語では、`%`から行末まではコメント扱いです。EPSでは、ファイルのヘッダに`%%`を特別なコメントとして、そのコメントに付加情報をつけます。いろいろ書いてありますが、もっとも重要なのは冒頭の`BoundingBox`です。ここで、全体のどこを切り取るかを指定します。
 
 例えば、(100, 100)に半径50の円を描画しましょう。
 
@@ -675,7 +675,7 @@ PostScript言語では、`%`から行末まではコメント扱いです。EPS�
 100 100 50 0 360 arc fill
 ```
 
-これをGhostScriptで実行すると円が見えます。
+これをGhostscriptで実行すると円が見えます。
 
 ![arc_fill](/images/ghostscript_sample/arc_fill.png)
 
