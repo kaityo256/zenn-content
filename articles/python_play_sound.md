@@ -205,9 +205,9 @@ def data2audio(img):
     BPM = 120
     qn_duration = 60.0/BPM
     x = np.zeros(int(length / qn_length * qn_duration * rate))
-    note_on = False
-    start = 0
     for i in range(12):
+        note_on = False
+        start = 0
         for j in range(length):
             if note_on:
                 if img[i][j] == 0:
