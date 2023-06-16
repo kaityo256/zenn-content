@@ -420,7 +420,7 @@ plt.show()
 パイこね変換の場合はきれいな構造が見えます。
 
 ```py
-x, y = get_xy(get_random(1000))
+x, y = get_xy(get_baker(1000))
 plt.scatter(x, y, marker='.')
 plt.show()
 ```
