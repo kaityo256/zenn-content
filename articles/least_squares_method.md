@@ -118,7 +118,7 @@ $$
 $a$で微分すると
 
 $$
-\frac{d\tilde{E}}{da} = 2N a - - 2 \sum_i^N\frac{y_i}{x_i}
+\frac{d\tilde{E}}{da} = 2N a - 2 \sum_i^N\frac{y_i}{x_i}
 $$
 
 これがゼロとなるような$a$は、先程考えた、傾きの単純平均による推定値
