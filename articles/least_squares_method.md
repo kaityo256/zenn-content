@@ -3,7 +3,7 @@ title: "最小二乗法の話"
 emoji: "🤖"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["数学","math"]
-published: false
+published: true
 ---
 
 ## はじめに
