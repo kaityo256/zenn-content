@@ -1,8 +1,8 @@
 ---
-title: "unicode-mathとLuaLaTeXとboldsymbolの組み合わせの話"
+title: "LuaLaTeXとunicode-mathとboldsymbolの組み合わせの話"
 emoji: "🤖"
 type: "tech" # tech: 技術記事 / idea: アイデア
-topics: ["数学","三角関数"]
+topics: ["latex","lualatex","pandoc"]
 published: true
 ---
 
@@ -119,7 +119,7 @@ pandoc test.md -o test.pdf --pdf-engine=lualatex -V documentclass=ltjarticle
 
 ### Poorman's boldsymbolを使う
 
-ここにあった解決策。プリアンブルに以下を記述する。
+[ここ](https://tex.stackexchange.com/a/55417)にあった解決策。プリアンブルに以下を記述する。
 
 ```tex
 \setmainfont{XITS}
@@ -184,3 +184,6 @@ pandoc test.md -o test.pdf --pdf-engine=lualatex -V documentclass=ltjarticle -H 
 ## まとめ
 
 LaTeXでベクトルを表す時、太字＋斜体にすると問題が多いので、単なる太字の`\mathbf`を使うか、素直に`\vec`を使うのが良さそう。
+
+タイトルに「LuaLaTeXの……」と書いたが、他のLaTeXエンジンではどうなるのかまでは調べていない。
+
