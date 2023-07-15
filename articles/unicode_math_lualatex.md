@@ -20,6 +20,11 @@ published: true
 \setmathfont[version=bold,FakeBold=3.5]{XITS Math}
 ```
 
+(2023年7月15日追記)
+
+[奥村さん](https://twitter.com/h_okumura)から`symbfit`を使うと良い、と教えていただきました。確かにLuaLaTeX+`unicode-math`の組み合わせでも`\symbfit`なら太字かつ斜体になります。VSCodeのプレビューは対応していませんが、GitHubのプレビューは[対応している](https://gist.github.com/kaityo256/0e37ba4e0b0b6de8c213b1b868e0e51c)ようです。
+
+
 ## 現象
 
 ### Markdown+Pandoc+LuaLatex
@@ -180,6 +185,26 @@ pandoc test.md -o test.pdf --pdf-engine=lualatex -V documentclass=ltjarticle -H 
 としてPDFに変換すると、以下のような出力となる。
 
 ![ok3](/images/unicode_math_lualatex/ok3.png)
+
+### (2023年7月15日追記)symbfitを利用する
+
+`\symbfit`を利用すれば、LuaLaTeXと`unicode-math`の組み合わせでも太字かつ斜体になる。
+
+```md
+# test
+
+$$
+\symbfit{r}=r
+$$
+```
+
+```sh
+pandoc test.md -o test.pdf --pdf-engine=lualatex -V documentclass=ltjarticle
+```
+
+出力はこんな感じ。
+
+![ok5](/images/unicode_math_lualatex/ok5.png)
 
 ## まとめ
 

@@ -1,0 +1,5 @@
+# test
+
+$$
+\symbfit{r}=r
+$$
