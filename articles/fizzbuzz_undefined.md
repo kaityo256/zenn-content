@@ -3,7 +3,7 @@ title: "未定義動作でFizzBuzz"
 emoji: "🤖"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["cpp","gcc","clang"]
-published: false
+published: true
 ---
 
 ## はじめに
