@@ -8,7 +8,7 @@ published: true
 
 ## はじめに
 
-たまにFizzBuzzが話題になりますね。いろんな解放があると思いますが、ここではC/C++言語の未定義動作を使ってFizzBuzzしてみましょうか。clang++にfizzを、g++にbuzzを表示してもらいます。
+たまにFizzBuzzが話題になりますね。いろんな解法があると思いますが、ここではC/C++言語の未定義動作を使ってFizzBuzzしてみましょうか。clang++にfizzを、g++にbuzzを表示してもらいます。
 
 ## コード
 
