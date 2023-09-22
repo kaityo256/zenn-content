@@ -16,16 +16,13 @@ published: true
 
 ```cpp
 #include <cstdio>
-
 int main(){
-  const char *str[] = {"fizz", "buzz"};
-  int a = 0, b = 0, c = 0;
-  a = ++a + --a;
-  b = --b + ++b + ++b;
-  c = ++c + ++c + b;
+  int a = 0, b = 0;
+  a = --a + ++a + ++a;
+  b = ++b + ++b + a;
   for (int i=1;i<16;i++){
-    if (i%c==0){
-      printf("%s\n",str[b]);
+    if (i%b==0){
+      printf("%s\n",a?"buzz":"fizz");
     }else{
       printf("%d\n",i);
     }
@@ -39,16 +36,13 @@ int main(){
 
 ```sh
 $ clang++ test.cc
-test.cc:6:7: warning: multiple unsequenced modifications to 'a' [-Wunsequenced]
-  a = ++a + --a;
+test.cc:4:7: warning: multiple unsequenced modifications to 'a' [-Wunsequenced]
+  a = --a + ++a + ++a;
       ^     ~~
-test.cc:7:7: warning: multiple unsequenced modifications to 'b' [-Wunsequenced]
-  b = --b + ++b + ++b;
+test.cc:5:7: warning: multiple unsequenced modifications to 'b' [-Wunsequenced]
+  b = ++b + ++b + a;
       ^     ~~
-test.cc:8:7: warning: multiple unsequenced modifications to 'c' [-Wunsequenced]
-  c = ++c + ++c + b;
-      ^     ~~
-3 warnings generated.
+2 warnings generated.
 
 $ ./a.out
 1
@@ -103,27 +97,18 @@ g++でコンパイルすると、5の倍数の時だけbuzzと言います。
   a = ++a + --a;
 ```
 
-は、clang++では1に、g++では0になります。
-
-逆に、
+は、clang++では0に、g++では1になります。これにより、clang++であるかg++であるかのフラグに使えます。
 
 ```cpp
   int b = 0;
-  b = --b + ++b + ++b;
+  b = ++b + ++b;
 ```
 
-は、clang++では0に、g++では1になります。これにより、`a`と`b`をそれぞれclang++であるかg++であるかのフラグに使えます。
+は、clang++では3に、g++では4になります。なのでさらに`a`を足して、
 
 ```cpp
-  int c = 0;
-  c = ++c + ++c;
-```
-
-は、clang++では3に、g++では4になります。なのでさらに`b`を足して、
-
-```cpp
-  int c = 0;
-  c = ++c + ++c + b;
+  int b = 0;
+  b = ++b + ++b + a;
 ```
 
 とすると、clang++では3に、g++では5になります。
