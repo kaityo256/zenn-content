@@ -12,12 +12,13 @@ published: true
 
 ## コード
 
-以下がコードです。
+以下がコードです(9/22少し修正)。
 
 ```cpp
 #include <cstdio>
 
 int main(){
+  const char *str[] = {"fizz", "buzz"};
   int a = 0;
   a = ++a + --a;
   int b = 0;
@@ -25,10 +26,8 @@ int main(){
   int c = 0;
   c = ++c + ++c + b;
   for (int i=1;i<16;i++){
-    if (i%c==0 && a){
-      printf("fizz\n");
-    }else if (i%c==0 && b){
-      printf("buzz\n");
+    if (i%c==0){
+      printf("%s\n",str[b]);
     }else{
       printf("%d\n",i);
     }
@@ -42,13 +41,13 @@ int main(){
 
 ```sh
 $ clang++ test.cc
-test.cc:5:7: warning: multiple unsequenced modifications to 'a' [-Wunsequenced]
+test.cc:6:7: warning: multiple unsequenced modifications to 'a' [-Wunsequenced]
   a = ++a + --a;
       ^     ~~
-test.cc:7:7: warning: multiple unsequenced modifications to 'b' [-Wunsequenced]
+test.cc:8:7: warning: multiple unsequenced modifications to 'b' [-Wunsequenced]
   b = --b + ++b + ++b;
       ^     ~~
-test.cc:9:7: warning: multiple unsequenced modifications to 'c' [-Wunsequenced]
+test.cc:10:7: warning: multiple unsequenced modifications to 'c' [-Wunsequenced]
   c = ++c + ++c + b;
       ^     ~~
 3 warnings generated.
@@ -77,7 +76,7 @@ clang++でコンパイルしたら、3の倍数の時だけfizzと言います�
 
 ```sh
 $ g++ test.cc
-$ $ ./a.out
+$ ./a.out
 1
 2
 3
