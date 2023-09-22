@@ -19,11 +19,9 @@ published: true
 
 int main(){
   const char *str[] = {"fizz", "buzz"};
-  int a = 0;
+  int a = 0, b = 0, c = 0;
   a = ++a + --a;
-  int b = 0;
   b = --b + ++b + ++b;
-  int c = 0;
   c = ++c + ++c + b;
   for (int i=1;i<16;i++){
     if (i%c==0){
@@ -44,10 +42,10 @@ $ clang++ test.cc
 test.cc:6:7: warning: multiple unsequenced modifications to 'a' [-Wunsequenced]
   a = ++a + --a;
       ^     ~~
-test.cc:8:7: warning: multiple unsequenced modifications to 'b' [-Wunsequenced]
+test.cc:7:7: warning: multiple unsequenced modifications to 'b' [-Wunsequenced]
   b = --b + ++b + ++b;
       ^     ~~
-test.cc:10:7: warning: multiple unsequenced modifications to 'c' [-Wunsequenced]
+test.cc:8:7: warning: multiple unsequenced modifications to 'c' [-Wunsequenced]
   c = ++c + ++c + b;
       ^     ~~
 3 warnings generated.
