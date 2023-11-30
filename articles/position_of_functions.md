@@ -3,7 +3,7 @@ title: "関数の定義位置により結果が変わるコード"
 emoji: "🤖"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["C","GCC"]
-published: false
+published: true
 ---
 
 ## はじめに
@@ -19,6 +19,8 @@ published: false
 [Cの可変長引数とABIの奇妙な関係](https://qiita.com/qnighy/items/be04cfe57f8874121e76)
 
 ですが、先のポストへの反応を見ていると、いまいち何が起きているかが伝わっていないようだったので、簡単に説明しようと思います。
+
+以下、使用コンパイラはGCC 9.3.0、環境はWSL上のUbuntu 20.04です。
 
 ## 現象
 
