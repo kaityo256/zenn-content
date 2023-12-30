@@ -543,3 +543,8 @@ $$
 僕は最初に行列の積の定義を見た時、「なんでこんなややこしい積を考えなきゃいけないんだ」と不思議に思いましたが、今では「なんでこの積の定義だけでこんなにたくさんのものを表現できるんだろう」と不思議に思います。
 
 本稿により少しでも行列の面白さが伝われば幸いです。
+
+## 合わせて読みたい
+
+* [二次方程式の話](https://zenn.dev/kaityo256/articles/quadratic_equation)
+* [三角関数の話](https://zenn.dev/kaityo256/articles/trigonometric_function)
