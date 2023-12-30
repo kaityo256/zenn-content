@@ -117,29 +117,29 @@ $$
 
 $$
 \begin{aligned}
-\mathrm{e}_0 \mathrm{e}_0 &= \mathrm{e}_0\\
-\mathrm{e}_0 \mathrm{e}_1 &= \mathrm{e}_1\\
-\mathrm{e}_1 \mathrm{e}_0 &= \mathrm{e}_1\\
-\mathrm{e}_1 \mathrm{e}_1 &= -\mathrm{e}_1
+\mathbf{e}_0 \mathbf{e}_0 &= \mathbf{e}_0\\
+\mathbf{e}_0 \mathbf{e}_1 &= \mathbf{e}_1\\
+\mathbf{e}_1 \mathbf{e}_0 &= \mathbf{e}_1\\
+\mathbf{e}_1 \mathbf{e}_1 &= -\mathbf{e}_1
 \end{aligned}
 $$
 
-要するに$\mathrm{e}_0$をかけても何も起きず、$\mathrm{e}_1$の自乗は$-\mathrm{e}_0$となるような基底を考えればよいことになります。
+要するに$\mathbf{e}_0$をかけても何も起きず、$\mathbf{e}_1$の自乗は$-\mathbf{e}_0$となるような基底を考えればよいことになります。
 
 これは、行列を用いると
 
 $$
 \begin{aligned}
-\mathrm{e}_0 &= \begin{pmatrix}
+\mathbf{e}_0 &= \begin{pmatrix}
 1 & 0 \\ 0 & 1
 \end{pmatrix}\\
-\mathrm{e}_1 &= \begin{pmatrix}
+\mathbf{e}_1 &= \begin{pmatrix}
 0 & -1 \\ 1 & 0
 \end{pmatrix}
 \end{aligned}
 $$
 
-と表現できます。$\mathrm{e}_0$は単位行列なのでかけても何もおきず、$\mathrm{e}_1$については
+と表現できます。$\mathbf{e}_0$は単位行列なのでかけても何もおきず、$\mathbf{e}_1$については
 
 $$
 \begin{pmatrix}
@@ -152,15 +152,15 @@ $$
 \begin{pmatrix}
 -1 & 0 \\ 0 & -1
 \end{pmatrix}
-= \mathrm{e}_0
+= \mathbf{e}_0
 $$
 
 なので、たしかに先程要請した関係式を満たしていることがわかります。
 
-以上から、$\mathrm{e}_1$が虚数単位であり、その行列表現が
+以上から、$\mathbf{e}_1$が虚数単位であり、その行列表現が
 
 $$
-\mathrm{e}_1 =
+\mathbf{e}_1 =
 \begin{pmatrix}
 0 & -1 \\ 1 & 0
 \end{pmatrix}
@@ -174,16 +174,16 @@ $$
 x^2 = -1
 $$
 
-という方程式が以下のように解けます。まず、$1$は$\mathrm{e}_0$の略と考えると、
+という方程式が以下のように解けます。まず、$1$は$\mathbf{e}_0$の略と考えると、
 
 $$
-x^2 = - \mathrm{e}_0
+x^2 = - \mathbf{e}_0
 $$
 
 となります。ここから、
 
 $$
-x = \pm \mathrm{e}_1
+x = \pm \mathbf{e}_1
 $$
 
 と解くことができます。
@@ -197,13 +197,13 @@ $$
 という関数も
 
 $$
-f(x) = x^2 -2x + 2\mathrm{e}_0
+f(x) = x^2 -2x + 2\mathbf{e}_0
 $$
 
 としてから、
 
 $$
-f(x) = (x -\mathrm{e}_0 - \mathrm{e}_1)(x - \mathrm{e}_0 + \mathrm{e}_1)
+f(x) = (x -\mathbf{e}_0 - \mathbf{e}_1)(x - \mathbf{e}_0 + \mathbf{e}_1)
 $$
 
 と因数分解することができます(積をバラして、基底の積が満たす式を使って簡略化すると、ちゃんと元に戻ることがわかります)。
@@ -211,7 +211,7 @@ $$
 以上から、実数$a$は
 
 $$
-a \mathrm{e}_0 = \begin{pmatrix}
+a \mathbf{e}_0 = \begin{pmatrix}
 a & 0 \\ 0 & a
 \end{pmatrix}
 $$
@@ -219,7 +219,7 @@ $$
 という対角行列に、純虚数$bi$は
 
 $$
-b \mathrm{e}_1 = \begin{pmatrix}
+b \mathbf{e}_1 = \begin{pmatrix}
 0 & -b \\ b & 0
 \end{pmatrix}
 $$
@@ -396,7 +396,7 @@ $$
 
 $$
 \begin{aligned}
-\mathrm{e}_1 &\equiv \begin{pmatrix}
+\mathbf{e}_1 &\equiv \begin{pmatrix}
 0 & -1\\
 -1 & 0
 \end{pmatrix}
@@ -415,13 +415,13 @@ $$
 \end{aligned}
 $$
 
-ようするに$i$の代わりにその行列表現を突っ込んだものになっています。これにより、基底$\mathrm{e}_1$は4行4列の実行列として表現できました。
+ようするに$i$の代わりにその行列表現を突っ込んだものになっています。これにより、基底$\mathbf{e}_1$は4行4列の実行列として表現できました。
 
-$\mathrm{e}_3$も同様です。
+$\mathbf{e}_3$も同様です。
 
 $$
 \begin{aligned}
-\mathrm{e}_3 &\equiv \begin{pmatrix}
+\mathbf{e}_3 &\equiv \begin{pmatrix}
 1 & 0\\
 0 & -1
 \end{pmatrix}
@@ -441,11 +441,11 @@ $$
 $$
 
 
-$\mathrm{e}_2$に関しては
+$\mathbf{e}_2$に関しては
 
 $$
 \begin{aligned}
-\mathrm{e}_2 &\equiv \begin{pmatrix}
+\mathbf{e}_2 &\equiv \begin{pmatrix}
 0 & -1\\
 1 & 0
 \end{pmatrix}
@@ -528,10 +528,10 @@ $$
 これらを使うと、最初の因数分解の問題は、
 
 $$
-(a^2 + b^2 + c^2 + d^2)\mathrm{e}_0
+(a^2 + b^2 + c^2 + d^2)\mathbf{e}_0
 =
-(a \mathrm{e}_0+ b\mathrm{e}_1 + c\mathrm{e}_2 + d\mathrm{e}_3)
-(a \mathrm{e}_0- b\mathrm{e}_1 - c\mathrm{e}_2 - d\mathrm{e}_3)
+(a \mathbf{e}_0+ b\mathbf{e}_1 + c\mathbf{e}_2 + d\mathbf{e}_3)
+(a \mathbf{e}_0- b\mathbf{e}_1 - c\mathbf{e}_2 - d\mathbf{e}_3)
 $$
 
 と書くことができます。これが我々がやりたかったことでした。
