@@ -2,7 +2,7 @@
 title: "Union-Findアルゴリズムと計算科学の話"
 emoji: "🤖"
 type: "tech" # tech: 技術記事 / idea: アイデア
-topics: []
+topics: ["python","数値計算"]
 published: false
 ---
 
@@ -33,7 +33,9 @@ $$
 
 ここから「ある要素$x$と$y$は同じグループか？」「最大のグループのサイズはどれくらいか？」などが知りたいとします。このときに使われるアルゴリズムがUnion-Findアルゴリズムです。
 
-Union-Findアルゴリズムの実装はいくつかありますが、もっとも簡単なのは一次元配列を使った実装です。全要素数が`N`である場合、`cluster[i] = i`であるようなサイズ`N`の配列を用意します。
+Union-Findアルゴリズムの実装はいくつかありますが、もっとも簡単なのは一次元配列を使った実装です。以下には概略のみ示しますが、実装のイメージについては例えば[Union-Find木のサンプルコード](https://qiita.com/kaityo256/items/5a3b03ff465778c23f6a)を参照してください。
+
+全要素数が`N`である場合、`cluster[i] = i`であるようなサイズ`N`の配列を用意します。
 
 ```py
 cluster = [i for i in range(N)]
@@ -81,11 +83,20 @@ def isSameGroup(i, j, cluster):
 
 ## 物理との関わり
 
-Union-Findアルゴリズムはグラフ操作でよく現れるアルゴリズムですが、物理現象の解析もよくでてきます。典型例はパーコレーションです。例えば正方格子に、ある確率$p$で粒子があり、$1-p$で粒子が存在しないとき、上下左右に粒子があるときだけ移動できるとするとき、この系全体にわたって移動可能かどうか、という問題を考えることができます。これは例えば不純物を含む金属のモデルになっており、系全体が移動可能であるときには電気が流れ、そうでない場合は絶縁体になっている、と考えることができます。
+Union-Findアルゴリズムはグラフ操作でよく現れるアルゴリズムですが、物理現象の解析もよくでてきます。典型例はパーコレーションです。例えば正方格子に、ある確率$p$で粒子があり、$1-p$で粒子が存在しないとき、上下左右に粒子があるときだけ移動できるとするとき、この系全体にわたって移動可能かどうか、という問題を考えることができます。これは例えば不純物を含む金属のモデルになっており、系全体が移動可能であるときには電気が流れ、そうでない場合は絶縁体になっている、と考えることができます。パーコレーションについては[こちら](https://sizu.me/kaityo256/posts/rbemvb4696a5)も参考にしてください。
 
 さて、物性物理において、Union-Findアルゴリズムはスピン系の更新アルゴリズムでよく使われます。単純な例は正方格子強磁性イジング模型です。この模型の自発磁化の温度依存性を知りたい場合、普通はマルコフ連鎖モンテカルロ法を使い、メトロポリス法などでスピンを一つ一つひっくり返してサンプリングをすることになります。
 
-このようなスピン系のサンプリングをする際、極めて効率的なアルゴリズムとしてSwendsen-WangアルゴリズムやWolffアルゴリズムがあります。これは、分配関数の和を、あるグラフの和に取り直し、そのグラフについてサンプリングするというものです。その基礎アルゴリズムにUnion-Findアルゴリズムが使われます。詳細は[Swendsen-Wangアルゴリズムのサンプルコード](https://qiita.com/kaityo256/items/6539261993e282edc5aa)などを参照してください。
+このようなスピン系のサンプリングをする際、極めて効率的なアルゴリズムとしてSwendsen-WangアルゴリズムやWolffアルゴリズムがあります。
+
+* [R. H. Swendsen, J.-S. Wang, “Nonuniversal critical dynamics in Monte Carlo simulations”. Phys. Rev. Lett. vol. 58, pp. 86–88.](http://dx.doi.org/10.1103%2FPhysRevLett.58.86)
+* [U. Wolff, "Collective Monte Carlo Updating for Spin Systems", Phys. Rev. Lett. vol. 62, pp. 361 (1989)](https://doi.org/10.1103/PhysRevLett.62.361)
+
+これは、分配関数の和を、Fortuin-Kasteleyn表現と呼ばれるグラフの和に取り直し、そのグラフについてサンプリングするというものです。
+
+* [C.M.Fortuin, P.W.Kasteleyn, "On the random-cluster model: I. Introduction and relation to other models", Physica, vol. 57, pp 536 (1972).](https://doi.org/10.1016/0031-8914(72)90045-6)
+
+その基礎アルゴリズムにUnion-Findアルゴリズムが使われます。詳細は[Swendsen-Wangアルゴリズムのサンプルコード](https://qiita.com/kaityo256/items/6539261993e282edc5aa)などを参照してください。
 
 Swendsen-Wangアルゴリズムは、簡単に書くと
 
@@ -143,4 +154,37 @@ def union(i, j, cluster):
 などと、最初にクラスター代表番号を解決しておきたくなります。そうすると、2つをつなぐたびに`find`が走るため、メモリをランダムアクセスすることになります。他にもいろいろ工夫があるのですが、それがいずれもCPU的には負担が大きい形になります。
 
 さらに問題なのは、このコードの並列化が難しい点です。例えば与えられた同値関係のデータをいくつかにわけて、それぞれ独立にUnion-Findアルゴリズムを走らせたとしても、どこかで同じ配列の同じ場所を触る可能性がでてきます。よく領域分割系の並列化と異なり「どのスレッドとどのスレッドがいつ同じ場所を触るか」は事前にわからないため、マルチスレッドで並列化をしようとすると、本質的に排他制御が必要になります。
+
+## Union-Findアルゴリズムの並列化
+
+さて、様々な場所で使われるUnion-Findですが、計算機が本質的に並列化前提で進化しているため、当然Union-Findアルゴリズムも並列化したい、というニーズが出てきます。
+
+### GPGPU実装
+
+例えばSwendsen-WangアルゴリズムをGPGPUで実装した例としては、小村、岡部によるものが有名です。
+
+[Y. Komura and Y. Okabe, "CUDA programs for the GPU computing of the Swendsen–Wang multi-cluster spin flip algorithm: 2D and 3D Ising, Potts, and XY models", Comput. Phys. Commun. vol. 185, pp 1038-1034 (2014)](https://doi.org/10.1016/j.cpc.2013.10.029)
+
+これはHawickらによる、グラフラベリングのGPGPU上での並列実装に基づいています。
+
+[K. A. Hawick, A. Leist, and D. P. Playne, "Parallel graph component labelling with GPUs and CUDA", Parallel Comput., 36 (2010), pp. 655-678](https://doi.org/10.1016/j.parco.2010.07.002)
+
+グラフラベリングを並列化すると、どこかで衝突がおきてしまうため、それをアトミック演算(`atomicMin()`)を使って排他制御をしているようです。
+
+### マルチスレッド実装
+
+僕が知っているUnion-Findの並列実装の物理系への応用は、藤堂らによる量子スピン系で使われるループアルゴリズムのマルチスレッド実装です。
+
+[S. Todo, H. Matsuo, and H. Shitara, "Parallel loop cluster quantum Monte Carlo simulation of quantum magnets based on global union-find graph algorithm", Comput. Phys. Commun. vol. 239, pp. 84-93 (2019)](https://doi.org/10.1016/j.cpc.2019.01.004)
+
+これは、大規模なUnion-Findアルゴリズムの並列化を、x86と「京」で実装したものです。やはり、ラベルの更新に排他制御が必要となるため、「compare-and-swap」と呼ばれる、アトミックな命令を使っています。これはマルチスレッドを実装する現代のCPUには必ず実装されている命令であり、x86では`cmpxchgl`を、京の石であったSPARKでは`cas`を、インラインアセンブリで呼び出して実装したようです。
+
+これにより、スレッドセーフなUnion-Findアルゴリズムが実装されています。
+
+## まとめ
+
+Union-Findアルゴリズムは広く使われているアルゴリズムですが、物性物理の分野でもSwendsen-Wang、Wolff、ループアルゴリズムのベースアルゴリズムとして使われています。これらはアルゴリズムとしては極めて強力でありながら、メモリのレイテンシが直接見える、ランダムアクセスになるためキャッシュ効率が悪いなど、現代CPUでは性能を出しづらい形になっており、どのように実装すればよいかは非自明です。また、大規模化しようとすると並列化が必要になりますが、そのためにはスレッドセーフな実装が必要であり、CPUでもGPGPUでもアトミックな命令が必要になります。
+
+僕の知識が京コンピュータあたりで止まっているので、最近ではもっと進展があるのかもしれません。詳しい人は是非フォローの記事を書いてください。
+
 
