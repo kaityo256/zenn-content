@@ -3,7 +3,7 @@ title: "Union-Findアルゴリズムと計算科学の話"
 emoji: "🤖"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["python","数値計算"]
-published: false
+published: true
 ---
 
 ## 概要
