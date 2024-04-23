@@ -120,7 +120,7 @@ $$
 \mathbf{e}_0 \mathbf{e}_0 &= \mathbf{e}_0\\
 \mathbf{e}_0 \mathbf{e}_1 &= \mathbf{e}_1\\
 \mathbf{e}_1 \mathbf{e}_0 &= \mathbf{e}_1\\
-\mathbf{e}_1 \mathbf{e}_1 &= -\mathbf{e}_1
+\mathbf{e}_1 \mathbf{e}_1 &= -\mathbf{e}_0
 \end{aligned}
 $$
 
