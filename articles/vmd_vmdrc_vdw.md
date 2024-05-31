@@ -3,7 +3,7 @@ title: "VMDで描画方法としてVDWをデフォルトにする"
 emoji: "🤖"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["VMD","Visualization","MD"]
-published: false
+published: true
 ---
 
 ## TL;DR
