@@ -3,7 +3,7 @@ title: "プログラム、下から作るか？上から作るか？"
 emoji: "🤖"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["Python"]
-published: false
+published: true
 ---
 
 ## TL;DL
