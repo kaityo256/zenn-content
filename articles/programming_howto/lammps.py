@@ -25,6 +25,7 @@ def read_atoms(f):
         vz = float(a[7])
         atom = Atom(x, y, z, vx, vy, vz)
         atoms.append(atom)
+    return atoms  # ここを追加
 
 
 def read_file(filename):
@@ -37,11 +38,22 @@ def read_file(filename):
     return frames
 
 
+def temperature(atoms):
+    N = len(atoms)
+    K = 0.0
+    for a in atoms:
+        K += a.vx**2
+        K += a.vy**2
+        K += a.vz**2
+    T = K / 3.0 / N
+    return T
+
+
 def main():
     filename = "sample.lammpstrj"
     frames = read_file(filename)
     for atoms in frames:
-        print(len(atoms))
+        print(temperature(atoms))
 
 
 if __name__ == "__main__":
