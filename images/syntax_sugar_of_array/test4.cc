@@ -9,5 +9,5 @@ int main() {
 
   printf("%d\n", a[1][2]);
   printf("%d\n", (*(a + 1))[2]);
-  printf("%d\n", *(*(a + 1)) + 2);
+  printf("%d\n", *(*(a + 1) + 2));
 }
