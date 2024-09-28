@@ -3,7 +3,7 @@ title: "clang++に30740次元の配列を食わせると死ぬ"
 emoji: "🤖"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["cpp","clang","gcc"]
-published: false
+published: true
 ---
 
 ## はじめに
