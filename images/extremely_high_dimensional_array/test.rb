@@ -7,8 +7,8 @@ def check(cpp, n_dim)
   #include <typeinfo>
   int a#{astr};
   int main(){
-    //printf("%s\\n",typeid(a).name());
-    printf("%d\\n",sizeof(a));
+    printf("%s\\n",typeid(a).name());
+    //printf("%d\\n",sizeof(a));
   }
 CPPSRC
   File.open('test.cc', 'w') do |f|
@@ -36,7 +36,20 @@ def check_gcc
   end
 end
 
+def keisoku
+    n = 1000
+    for i in 1..10 do
+      start_time = Time.now
+      check("g++", n)
+      end_time = Time.now
+      puts "#{n} #{end_time - start_time}"
+      n *= 2
+    end
+end
+
 # check_clang
 # check_gcc
 
-check('g++-14', 320_000)
+# check('g++-14', 320_000)
+
+# check('g++',100)
