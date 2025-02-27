@@ -240,7 +240,7 @@ if __name__ == "__main__":
 
 要するに`*.cpp`を管理するリポジトリに`*.dat`を吐くけれど、それは`*.tex`を管理するリポジトリにコピーし、`*.dat`はそちらで管理する、ということです。
 
-### データから図の生成
+## データから図の生成
 
 数値計算をするのは、最終的には論文の図を作るためです。数値計算で`*.dat`を作りましたが、それらを最終的に`*.pdf`にしなければなりません。作図ソフトはPythonでもRubyなんでも良いのですが、僕はgnuplotを使うことが多いです。
 
@@ -248,7 +248,56 @@ if __name__ == "__main__":
 
 そこで、データから図を作る作業はなるべく自動化します。理想的にはトップディレクトリで`make`と入力したら、データファイルから必要な解析を経由して図のPDFが生成され、さらにそれを取り込んでLaTeXが走って論文PDFが生成されるようにしたいところです。
 
+実際に、以下のデータリポジトリにて、生データから論文に使う図のPDFがそのまま生成される仕組みを公開しています。
 
+[isspns-gitlab.issp.u-tokyo.ac.jp/kaityo256/aging_network_data](https://isspns-gitlab.issp.u-tokyo.ac.jp/kaityo256/aging_network_data)
+
+このリポジトリの`data`ディレクトリが、ほぼそのまま論文リポジトリの`fig`ディレクトリに対応しています。リポジトリのトップレベルには`Makefile`があり、`make`とすると論文に使われた図が生成されます。こんな感じです。
+
+```sh
+$ make
+python3 data/ccdf.py data/alpha_dep/degree_distribution_N10000_a-10_b20.dat
+data/alpha_dep/degree_distribution_N10000_a-10_b20.dat -> data/alpha_dep/degree_distribution_N10000_a-10_b20.ccdf
+python3 data/ccdf.py data/alpha_dep/degree_distribution_N10000_a20_b20.dat
+data/alpha_dep/degree_distribution_N10000_a20_b20.dat -> data/alpha_dep/degree_distribution_N10000_a20_b20.ccdf
+python3 data/ccdf.py data/alpha_dep/degree_distribution_N10000_a00_b20.dat
+data/alpha_dep/degree_distribution_N10000_a00_b20.dat -> data/alpha_dep/degree_distribution_N10000_a00_b20.ccdf
+python3 data/ccdf.py data/alpha_dep/degree_distribution_N10000_a30_b20.dat
+data/alpha_dep/degree_distribution_N10000_a30_b20.dat -> data/alpha_dep/degree_distribution_N10000_a30_b20.ccdf
+python3 data/ccdf.py data/alpha_dep/degree_distribution_N10000_a10_b20.dat
+data/alpha_dep/degree_distribution_N10000_a10_b20.dat -> data/alpha_dep/degree_distribution_N10000_a10_b20.ccdf
+cd data/alpha_dep; gnuplot alpha_dep_loglog.plt
+cp data/alpha_dep/alpha_dep_loglog.pdf fig05a.pdf
+(snip)
+cp data/finite_size/finite_size_a-15_b20.pdf figb1a.pdf
+cd data/finite_size; gnuplot finite_size.plt
+cp data/finite_size/finite_size_a30_b25.pdf figb1b.pdf
+cd data/finite_size; gnuplot finite_size.plt
+cp data/finite_size/finite_size_a-15_b-15.pdf figb1c.pdf
+cd data/finite_size; gnuplot finite_size.plt
+cp data/finite_size/finite_size_a20_b-10.pdf figb1d.pdf
+```
+
+最終的に`fig05a.pdf`から`figb1d.pdf`が生成されます。例えば`fig5a.pdf`に関係するところだけ抜き出すとこんな感じです。
+
+```makefile
+FIGS = fig05a.pdf fig05b.pdf fig06a.pdf fig06b.pdf fig07a.pdf fig07b.pdf fig08.pdf figa1.pdf figa2a.pdf figa2b.pdf figb1a.pdf figb1b.pdf figb1c.pdf figb1d.pdf
+
+all: $(FIGS)
+
+ALPHA_CCDF=data/alpha_dep/degree_distribution_N10000_a-10_b20.ccdf  data/alpha_dep/degree_distribution_N10000_a20_b20.ccdf data/alpha_dep/degree_distribution_N10000_a00_b20.ccdf data/alpha_dep/degree_distribution_N10000_a30_b20.ccdf data/alpha_dep/degree_distribution_N10000_a10_b20.ccdf
+
+%.ccdf: %.dat
+	python3 data/ccdf.py $<
+
+data/alpha_dep/alpha_dep_loglog.pdf: $(ALPHA_CCDF)
+	cd data/alpha_dep; gnuplot alpha_dep_loglog.plt
+
+fig05a.pdf: data/alpha_dep/alpha_dep_loglog.pdf
+	cp $< $@
+```
+
+生データ`*.dat`から、累積分布関数(Complementary Cumulative Distribution Function)データ`*.ccdf`をccdf.pyを使って作り、そのあとgnuplotで`alpha_dep_loglog.plt`を処理して`alpha_dep_loglog.pdf`を作り、それを`fig05a.pdf`としてコピーします。
 
 ## 終わりに
 
