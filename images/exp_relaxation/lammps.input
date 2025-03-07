@@ -1,0 +1,24 @@
+units lj
+atom_style atomic
+boundary p p p
+timestep 0.01
+
+
+# 初期条件の作成
+lattice fcc 2.0
+region simbox block 0 20 0 20 0 20
+create_box 1 simbox
+create_atoms 1 box
+mass 1 1.0
+velocity all create 1.0 1
+
+
+# 相互作用の指定
+pair_style lj/cut 2.5
+pair_coeff 1 1 1.0 1.0 2.5
+
+fix 1 all langevin 0.8 0.8 1.0 48279
+fix 2 all nve
+
+thermo 10
+run 1000
