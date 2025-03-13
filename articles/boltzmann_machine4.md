@@ -3,7 +3,7 @@ title: "制限ボルツマンマシンの基礎 ～微分編～"
 emoji: "🤖"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["Python","ML","BM","RBM"]
-published: true
+published: false
 ---
 
 ## はじめに
