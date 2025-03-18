@@ -31,11 +31,11 @@ cd my_first_ml
 次に、仮想環境を作ります。Pythonは様々なパッケージをインストールして使いますが、それらのパッケージがぶつかったり、バージョンが異なるとふるまいが変わったりして不便です。これをコンピュータ全体で管理すると、別のプロジェクトでインストールしたパッケージが別のプロジェクトとぶつかって、いつのまにか動かなくなっていた、なんてことがおきたりします。それを防ぐために、プロジェクトごとにパッケージを管理します。そのために使うのが仮想環境です。
 
 ```sh
-python3 -m venv myenv
-source myenv/bin/activate
+python3 -m venv .venv
+source .venv/bin/activate
 ```
 
-これにより、仮想環境`myenv`がアクティベートされました。以後、インストールされるパッケージは、`my_first_ml/myenv`以下に入ります。
+これにより、仮想環境`.venv`がアクティベートされました。以後、インストールされるパッケージは、`my_first_ml/.venv`以下に入ります。
 
 ```sh
 python3 -m pip install --upgrade pip
@@ -59,8 +59,6 @@ In [3]: exit
 TensorFlow/Kerasでニューラルネットワークを組んでMNISTを学習させるサンプルはこんな感じになります。
 
 ```py
-import numpy as np
-import tensorflow as tf
 from tensorflow import keras
 
 
@@ -70,18 +68,20 @@ def get_data():
     test_images, test_labels = test_data
     train_images = train_images / 255.0
     test_images = test_images / 255.0
-    return(train_images, train_labels, test_images, test_labels)
+    return (train_images, train_labels, test_images, test_labels)
 
 
 def create_model():
-    model = keras.Sequential([
-        keras.layers.Flatten(input_shape=(28, 28)),
-        keras.layers.Dense(128, activation='relu'),
-        keras.layers.Dense(10, activation='softmax')
-    ])
-    model.compile(optimizer='adam',
-                  loss='sparse_categorical_crossentropy',
-                  metrics=['accuracy'])
+    model = keras.Sequential(
+        [
+            keras.layers.Flatten(input_shape=(28, 28)),
+            keras.layers.Dense(128, activation="relu"),
+            keras.layers.Dense(10, activation="softmax"),
+        ]
+    )
+    model.compile(
+        optimizer="adam", loss="sparse_categorical_crossentropy", metrics=["accuracy"]
+    )
     return model
 
 
@@ -95,6 +95,8 @@ test_loss, test_acc = model.evaluate(test_images, test_labels)
 
 print(f"Test Loss = {test_loss}")
 print(f"Test Accuracy = {test_acc}")
+
+model.save("model.keras")
 ```
 
 たったこれだけです。これを`mnist_train.py`という名前で保存し、実行しましょう。
@@ -124,12 +126,10 @@ Test Accuracy = 0.9746000170707703
 さて、わずか数十行書いたら機械学習ができる時代になりましたが、その分、実装が隠蔽されており、何が起きているかわかりにくくなっています。先ほどのコードが何をしているか、調べてみましょう。
 
 ```py
-import numpy as np
-import tensorflow as tf
 from tensorflow import keras
 ```
 
-最初の方はライブラリのインポートです。`as`はインポートしたパッケージに別名をつける命令で、慣習として`numpy`は`np`、`tensorflow`は`tf`と略します。今後、`tensorflow.hogehoge`と書くかわりに`tf.hogehoge`と書けるようになります。
+最初はライブラリのインポートです。ここでは`tensorflow.keras`をインポートしています。
 
 ```py
 def get_data():
@@ -243,7 +243,7 @@ print(f"Test Accuracy = {test_acc}")
 先程作成したコード`mnist_train.py`の最後に一行付け加えるだけです。
 
 ```py
-model.save_weights('model')
+model.save("model.keras")
 ```
 
 ```sh
@@ -254,7 +254,6 @@ python3 mnist_train.py
 
 ```py
 import numpy as np
-import tensorflow as tf
 from tensorflow import keras
 
 
@@ -264,42 +263,29 @@ def get_data():
     test_images, test_labels = test_data
     train_images = train_images / 255.0
     test_images = test_images / 255.0
-    return(train_images, train_labels, test_images, test_labels)
-
-
-def create_model():
-    model = keras.Sequential([
-        keras.layers.Flatten(input_shape=(28, 28)),
-        keras.layers.Dense(128, activation='relu'),
-        keras.layers.Dense(10, activation='softmax')
-    ])
-    model.compile(optimizer='adam',
-                  loss='sparse_categorical_crossentropy',
-                  metrics=['accuracy'])
-    return model
+    return (train_images, train_labels, test_images, test_labels)
 
 
 (train_images, train_labels, test_images, test_labels) = get_data()
 
-model = create_model()
-model.load_weights('model')
+model = keras.models.load_model("model.keras")
 
-predictions = model.predict(test_images[0:20])
+predictions = model(test_images[0:20])
 
-for i in range(5):
+for i in range(20):
     predicted_index = np.argmax(predictions[i])
     print(f"prediction= {predicted_index} answer = {test_labels[i]}")
 ```
 
-途中まで`mnist_train.py`とほとんど同じです。慣れたら共通部分を別のファイルにまとめると良いでしょう。異なるのは、`model.fit`で重みをロードしていたところを、`mode.load_weights`で重みを読み込んでいるところです。TensorFlowは、モデルの「形」は保存してくれないので、このように`create_model`関数はモデルの保存、読み込みの両方で必要です。コードでモデルの形だけ作って、その重みをファイルからロードするイメージです。
+`keras.models.load_model`でmodelをロードできます。昔はネットワークの形は保存してくれませんでしたが、今は保存してくれるので、これだけでモデルの形、重みのロードが完了します。
 
 さて、重みを読み込んだモデルが「学習済みモデル」になるため、画像データを入力したら、それがどの手書き数字であるかを予測してくれることになります。とりあえず`test_images`の先頭の20個を食わせることにしましょう。コードのこの部分です。
 
 ```py
-predictions = model.predict(test_images[0:20])
+predictions = model(test_images[0:20])
 ```
 
-モデルを分類器をとして使う場合は、`model.predict`に配列を渡します。ここで注意ですが、効率のために画像をまとめて渡すことが前提になっています。つまり、画像をまとめて渡すと、それらに対する結果をまとめて返す、という形になっています。ここでは20枚のデータを渡したので、20個分の結果が`predictions`として帰ってきます。
+モデルを分類器をとして使う場合は、`model()`に配列を渡します。ここで注意ですが、`tensorflow.keras`では効率のために画像をまとめて渡すことが前提になっています。つまり、画像をまとめて渡すと、それらに対する結果をまとめて返す、という形になっています。ここでは20枚のデータを渡したので、20個分の結果が`predictions`として帰ってきます。
 
 さて、`predictions`は、ニューラルネットワークの生の出力になっています。20枚のデータを食わせたので、`predictions`は20次元の配列ですが、その配列の要素`predictions[i]`は、ニューラルネットワークが10個の分類器であることを反映して、10次元の配列になっています。これは、最後の10個のニューロンの出力です。そこで、10次元配列`predictions[i]`のうち、最大の値を持つインデックスを`numpy.argmax`で探してやりましょう。このうち、一番大きな出力を出したニューロンのインデックスが、このモデルが予測する結果となります。
 
@@ -500,7 +486,7 @@ print(f"Test Accuracy = {test_acc}")
 モデルの保存のところは、名前を変えておきましょう。
 
 ```py
-model.save_weights('baker')
+model.save("baker.keras")
 ```
 
 以上で準備は完了です。実行してみましょう。
@@ -530,7 +516,6 @@ Test Accuracy = 0.8169000148773193
 
 ```py
 import numpy as np
-import tensorflow as tf
 from tensorflow import keras
 
 
@@ -552,7 +537,7 @@ def make_data(n, length):
     x = []
     y = []
     for _ in range(length):
-        if(np.random.random() < 0.5):
+        if np.random.random() < 0.5:
             x.append(get_random(n))
             y.append(0)
         else:
@@ -563,20 +548,25 @@ def make_data(n, length):
     return x, y
 
 
-def create_model():
-    model = keras.Sequential([
-        keras.layers.Dense(100),
-        keras.layers.Dense(32, activation='relu'),
-        keras.layers.Dense(2, activation='softmax')
-    ])
-    model.compile(optimizer='adam',
-                  loss='sparse_categorical_crossentropy',
-                  metrics=['accuracy'])
-    return model
+model = keras.models.load_model("baker.keras")
 
+all_random_data = np.array([get_random(100) for _ in range(100)])
+all_random_labels = np.array([0] * 100)
 
-model = create_model()
-model.load_weights('baker')
+r_loss, r_acc = model.evaluate(all_random_data, all_random_labels)
+
+print("When everything is random")
+print(f"Test Loss = {r_loss}")
+print(f"Test Accuracy = {r_acc}")
+
+all_baker_data = np.array([get_baker(100) for _ in range(100)])
+all_baker_labels = np.array([1] * 100)
+
+b_loss, b_acc = model.evaluate(all_baker_data, all_baker_labels)
+
+print("When everything is baker map")
+print(f"Test Loss = {b_loss}")
+print(f"Test Accuracy = {b_acc}")
 ```
 
 これで学習済みモデルがロードされました。ちゃんと学習できているか調べるため、「全部が乱数」のデータを作って`model.evaluate`に食わせてみましょう。
