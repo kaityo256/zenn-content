@@ -45,9 +45,57 @@ $$
 
 ## 定式化
 
-まずは$f(x)$が満たすべき式を導出しましょう。
+![折れ線近似](/images/brachistochrone_curve/linear.png)
 
+まずは$f(x)$が満たすべき式を導出しましょう。$x$の区間を$N$等分し、一つの区間の長さを$\Delta x$とします。$i\Delta x < x \le (i+1)\Delta x$の区間を「区間$i$」と名付けましょう。それぞれの区間では曲線が直線で近似できるとする、折れ線近似を採用します。区間$i$において、曲線の$y$座標は
 
+$$
+\Delta y_i \equiv f(x_{i+1}) - f(x_i) = f'(x_i)\Delta x + O(\Delta x^2) 
+$$
+
+だけ変化します。
+
+区間$i$での曲線の長さを\l_i$とすると、三平方の定理から
+
+$$
+\begin{aligned}
+l_i &= \sqrt{\Delta x^2 + \Delta y_i^2}\\
+&= \Delta x\sqrt{1 + \left(\frac{\Delta y_i}{\Delta x}\right)^2}\\
+&\sim \Delta x \sqrt{1 + f'(x_i)^2}
+\end{aligned}
+$$
+
+です。また、スタート地点では速度が$0$であったとすると、エネルギー保存則から常に
+
+$$
+\frac{1}{2}v^2 = gy
+$$
+
+が成り立ちます。ここから、区間$i$における速度$v_i$は
+
+$$
+v_i = \sqrt{2g f(x_i)}
+$$
+
+となります。区間$i$を走破するのにかかる時間$T_i$は
+
+$$
+T_i = \frac{l_i}{v_i} = \frac{\sqrt{1+ f'(x_i)^2}}{\sqrt{2g f(x_i)}} \Delta x
+$$
+
+です。かかる時間の総和$T$は
+
+$$
+T= \sum_i^N T_i = \sum_i^N T_i = \frac{l_i}{v_i} = \frac{\sqrt{1+ f'(x_i)^2}}{\sqrt{2g f(x_i)}} \Delta x
+$$
+
+連続極限をとると、
+
+$$
+T = \int \frac{\sqrt{1+ f'(x)^2}}{\sqrt{2g f(x)}} dx
+$$
+
+これを最小にするような$f(x)$を求めなさい、というのが最速降下曲線問題です。
 
 
 ## スネルの法則
