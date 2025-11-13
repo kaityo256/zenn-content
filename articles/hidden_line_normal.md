@@ -12,6 +12,12 @@ published: false
 
 ![rotate.gif](/images/hidden_line_normal/rotate.gif)
 
+Pythonによるサンプルコードは以下にあります。
+
+[https://github.com/kaityo256/hidden-line](https://github.com/kaityo256/hidden-line)
+
+そのままGoogle Colabで試すことができるサンプルもあります。
+
 ## はじめに
 
 3次元の物体を2次元に射影することを考えます。例えば立方体を描画するとこんな感じになります。
@@ -66,4 +72,54 @@ published: false
 
 ## 具体的な実装
 
-さて、法線ベクトル法のコンセプトは簡単なのですが、
+さて、法線ベクトル法のコンセプトは簡単なのですが、実装はわりと面倒です。もともとの目的が分子動力学シミュレーションの可視化なので、以後、描画する直方体のことをシミュレーションボックスと呼びます。
+
+最初に、シミュレーションボックスをx, y, z軸にそろえておきます。すなわち、$x_\mathrm{min} < x < x_\mathrm{max}, y_\mathrm{min} < y < y_\mathrm{max},z_\mathrm{min} < z < z_\mathrm{max}$を満たすような領域をシミュレーションボックスと定義します。
+
+この世界を、3次元回転行列$R$によって回転させた結果、どの辺が見えなくなるかを判定するコードを考えます。そのために、まずはシミュレーションボックスを構成する頂点、面、辺に番号をつけましょう。
+
+まずは頂点に番号をつけます。頂点は8個ありますが、以下のように2進数的なノリで番号付けすると良いでしょう。
+
+![index1.png](/images/hidden_line_normal/index1.png)
+
+| 頂点番号 | 座標 |
+| ---- | ---- |
+| 0 | $(x_\mathrm{min}, y_\mathrm{min}, z_\mathrm{min})$ |
+| 1 | $(x_\mathrm{max}, y_\mathrm{min}, z_\mathrm{min})$ |
+| 2 | $(x_\mathrm{min}, y_\mathrm{max}, z_\mathrm{min})$ |
+| 3 | $(x_\mathrm{max}, y_\mathrm{max}, z_\mathrm{min})$ |
+| 4 | $(x_\mathrm{min}, y_\mathrm{min}, z_\mathrm{max})$ |
+| 5 | $(x_\mathrm{max}, y_\mathrm{min}, z_\mathrm{max})$ |
+| 6 | $(x_\mathrm{min}, y_\mathrm{max}, z_\mathrm{max})$ |
+| 7 | $(x_\mathrm{max}, y_\mathrm{min}, z_\mathrm{max})$ |
+
+次に、面に番号をつけましょう。まず、$x = x_\mathrm{min}$であるような面を0として、対面する面はインデックスが3だけずれるようにしましょう。
+
+![index2.png](/images/hidden_line_normal/index2.png)
+
+| 面番号 | 座標 | 
+| ---- | ---- |
+| 0 | $x = x_\mathrm{min}$|
+| 1 | $y = y_\mathrm{min}$|
+| 2 | $z = z_\mathrm{min}$|
+| 3 | $x = x_\mathrm{max}$|
+| 4 | $y = y_\mathrm{max}$|
+| 5 | $z = z_\mathrm{max}$|
+
+最後に、辺に番号をつけます。先ほど定義した点を2つ組み合わせることで辺を表現しましょう。例えば、辺番号0番は$(x_\mathrm{min}, y_\mathrm{min}, z_\mathrm{min})$から$(x_\mathrm{max}, y_\mathrm{min}, z_\mathrm{min})$までの線分とします。これは0番の点と1番の点なので$(0, 1)$と表現します。同様に他の辺も定義していきます。
+
+| 辺番号 | 点の組み合わせ | 
+| ---- | ---- |
+| 0    | $ (0, 1) $ | 
+| 1    | $ (2, 3) $ | 
+| 2    | $ (4, 5) $ | 
+| 3    | $ (6, 7) $ | 
+| 4    | $ (0, 2) $ | 
+| 5    | $ (1, 3) $ | 
+| 6    | $ (4, 6) $ | 
+| 7    | $ (5, 7) $ | 
+| 8    | $ (0, 4) $ | 
+| 9    | $ (1, 5) $ | 
+| 10   | $ (2, 6) $ | 
+| 11   | $ (3, 7) $ | 
+
