@@ -95,7 +95,7 @@ published: true
 | 4 | $(x_\mathrm{min}, y_\mathrm{min}, z_\mathrm{max})$ |
 | 5 | $(x_\mathrm{max}, y_\mathrm{min}, z_\mathrm{max})$ |
 | 6 | $(x_\mathrm{min}, y_\mathrm{max}, z_\mathrm{max})$ |
-| 7 | $(x_\mathrm{max}, y_\mathrm{min}, z_\mathrm{max})$ |
+| 7 | $(x_\mathrm{max}, y_\mathrm{max}, z_\mathrm{max})$ |
 
 次に、面に番号をつけましょう。まず、$x = x_\mathrm{min}$であるような面を0として、対面する面はインデックスが3だけずれるようにしましょう。また、それぞれの法線ベクトルもまとめておきます。
 
