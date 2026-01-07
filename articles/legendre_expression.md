@@ -106,7 +106,7 @@ $$
 
 ## 面積表式
 
-![tangent](https://raw.githubusercontent.com/kaityo256/zenn-content/main/articles/legendre_expression/int1.png)
+![int1](/images/legendre_expression/int1.png)
 
 $(x,X)$空間を考えます。この空間における曲線を考えます。$x$を自由変数に取るなら$X=f(x)$、$X$を自由変数にとるなら$x=g(X)$と表現できます。$f$と$g$はお互いに逆関数です。
 
@@ -127,7 +127,7 @@ $$
 
 となります。
 
-![tangent](https://raw.githubusercontent.com/kaityo256/zenn-content/main/articles/legendre_expression/int2.png)
+![int2](/images/legendre_expression/int2.png)
 
 さて、上の図において長方形が曲線で分割されていると考えると、長方形の面積が$xX$、曲線の下部分の面積が$y$、曲線の左部分の面積が$Y$なので、
 
