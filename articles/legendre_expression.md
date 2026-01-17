@@ -12,7 +12,7 @@ published: true
 
 例えば正六面体の各面の重心を結ぶと、正八面体になります。この時「正六面体→正八面体」の変換は「面」と「点」の入れ替えに対応しています。同様に、正八面体の各面の重心を結ぶと、正六面体が出てきます。このように、双対変換は「入れ替え」を二度したらもとに戻ります。
 
-![dual](https://raw.githubusercontent.com/kaityo256/zenn-content/main/articles/legendre_expression/dual.png)
+![dual](/images/legendre_expression/dual.png)
 
 また、「AならばB」という命題に対して、「Bでないなら、Aではない」のような命題は対偶と呼ばれますが、両者の真偽は一致します。これも双対です。フーリエ変換やラプラス変換のように、逆変換してもとに戻るやつはだいたい双対変換といって良いでしょう。
 
@@ -31,7 +31,7 @@ $$
 
 と書きましょう。これは傾き$X$、切片$Y$の直線を表しています。
 
-![tangent](https://raw.githubusercontent.com/kaityo256/zenn-content/main/articles/legendre_expression/tangent.png)
+![tangent](/images/legendre_expression/tangent.png)
 
 接線の定義からすぐに
 
