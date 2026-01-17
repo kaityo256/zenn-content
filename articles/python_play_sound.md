@@ -37,7 +37,7 @@ IPython.display.Audio(x, rate=rate, autoplay=True)
 
 そのデータ数だけの波形データを用意すれば良いわけですが、今回は440Hzのサインカーブ$\sin(2 \pi f t)$を書き込んだ配列`x`を、`IPython.display.Audio`に突っ込めばOKです。例えばGoogle Colabで実行すると以下のような画面が出て、音がなります。
 
-![実行画面](https://raw.githubusercontent.com/kaityo256/zenn-content/main/articles/python_play_sound/playsound.png)
+![実行画面](/images/python_play_sound/playsound.png)
 
 後のために、テンポから４分音符の長さを求めて、その長さだけ演奏するようにしましょう。4分音符の音の長さはBPM (Beat Per Minutes)から決まります。BPMは1分あたりの4分音符の数です。なのでBPM=60なら4分音符は1秒、120なら0.5です。ここではBPM=120、つまり4分音符の長さは0.5秒としましょう。
 
@@ -158,7 +158,7 @@ Image.fromarray(data)
 
 こんな画像が得られます。
 
-![キラキラ星](https://raw.githubusercontent.com/kaityo256/zenn-content/main/articles/python_play_sound/pn_twinkle_star.png)
+![キラキラ星](/images/python_play_sound/pn_twinkle_star.png)
 
 「かえるのうた」も同様です。
 
@@ -167,7 +167,7 @@ data = mml2data("CDEFEDCREFGAGFERCRCRCRCRCDEFEDCR")
 Image.fromarray(data)
 ```
 
-![かえるのうた](https://raw.githubusercontent.com/kaityo256/zenn-content/main/articles/python_play_sound/pn_frog_song.png)
+![かえるのうた](/images/python_play_sound/pn_frog_song.png)
 
 ピアノロールなら音を複数同時に鳴らす表現が可能なので、既存のデータにMMLを追加する関数を作りましょう。
 
@@ -190,7 +190,7 @@ data = mml2data_append(data, "RRRRRRRRRRRRRRRRCDEFEDCREFGAGFER")
 Image.fromarray(data)
 ```
 
-![かえるのうた](https://raw.githubusercontent.com/kaityo256/zenn-content/main/articles/python_play_sound/pn_frog_song2.png)
+![かえるのうた](/images/python_play_sound/pn_frog_song2.png)
 
 面倒なので、最初の人が歌い終わったらおしまいにしています。
 
@@ -236,7 +236,7 @@ data2audio(data)
 
 以下のように、食わせたピアノロールが表示されつつ、音もなったはずです。
 
-![キラキラ星](https://raw.githubusercontent.com/kaityo256/zenn-content/main/articles/python_play_sound/play_pn_twinkle_star.png)
+![キラキラ星](/images/python_play_sound/play_pn_twinkle_star.png)
 
 「かえるのうた」の輪唱版も鳴らしてみましょう。
 
@@ -248,7 +248,7 @@ IPython.display.display(Image.fromarray(data))
 data2audio(data)
 ```
 
-![かえるのうた(輪唱版)](https://raw.githubusercontent.com/kaityo256/zenn-content/main/articles/python_play_sound/play_pn_frog_song.png)
+![かえるのうた(輪唱版)](/images/python_play_sound/play_pn_frog_song.png)
 
 「かえるのうた」が聞こえてきたでしょうか？
 
