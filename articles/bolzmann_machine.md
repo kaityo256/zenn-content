@@ -201,8 +201,8 @@ $$
 
 $$
 \begin{aligned}
-P(v_a=1, h_c=1) &= \frac{\exp(b_a + b_c + W_{ac})}{\exp(b_a + W_{ac}) + \exp(b_c)} \\
-P(v_a=0, h_c=1) &= \frac{\exp(b_a + b_c + W_{ac})}{\exp(b_a + W_{ac}) + \exp(b_c)}
+P(v_a=1, h_c=1) &= \frac{\exp(b_a + b_c + W_{ac})}{\exp(b_a + b_c + W_{ac}) + \exp(b_c)} \\
+P(v_a=0, h_c=1) &= \frac{\exp(b_a + b_c + W_{ac})}{\exp(b_a + b_c + W_{ac}) + \exp(b_c)}
 \end{aligned}
 $$
 
