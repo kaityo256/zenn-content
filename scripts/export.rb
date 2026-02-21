@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "json"
+require 'open-uri'
 
 def load_zenn_json(path, articles)
   unless File.file?(path)
@@ -42,7 +43,8 @@ def export_article(article)
   content = rewrite_image_paths(content)
   fmatter = front_matter(article)
   content = fmatter + content
-  export_file = 'mysite/_posts/' + slug + '.md'
+  published_at = Time.iso8601(article['published_at']).strftime('%Y-%m-%d')
+  export_file = 'mysite/_posts/' + published_at + '-' + slug + '.md'
   puts export_file
   File.write(export_file, content)
 end
@@ -55,9 +57,6 @@ title: #{article['title']}
 tags: [zenn]
 permalink: #{article['slug']}
 ---
-
-# #{article['title']}
-
   EOS
   fmatter
 end
@@ -66,7 +65,6 @@ articles = []
 
 load_zenn_json("zenn1.json", articles)
 load_zenn_json("zenn2.json", articles)
-
 articles.each do |article|
   export_article(article)
 end
